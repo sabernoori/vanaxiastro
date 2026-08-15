@@ -1,0 +1,156 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://vanaxi.com/#organization",
+      "name": "ونکسی",
+      "alternateName": ["Vanaxi", "ونکسی حمل و نقل سازمانی"],
+      "legalName": "ونکسی",
+      "url": "https://vanaxi.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://vanaxi.com/assets/images/6a6a44df0f27820ac881fc49_logo.svg"
+      },
+      "image": "https://vanaxi.com/assets/images/6a6ba3019788fb2728d17441_Prestige.png",
+      "description": "ونکسی ارائه‌دهنده خدمات حمل‌ونقل سازمانی در ایران است؛ سرویس پرسنل، سفر در اختیار، ترانسفر فرودگاهی و سفرهای بین‌شهری با ناوگان باکیفیت، رانندگان آموزش‌دیده و هزینه شفاف.",
+      "slogan": "شریک استراتژیک شما در حمل‌ونقل",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Iran"
+      },
+      "knowsLanguage": ["fa", "fa-IR"],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "availableLanguage": ["fa"],
+        "url": "https://vanaxi.com/#process"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "خدمات حمل‌ونقل سازمانی ونکسی",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "سرویس پرسنل",
+              "description": "جابه‌جایی منظم کارکنان سازمان طبق مسیر و شیفت تعریف‌شده."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "سفر در اختیار",
+              "description": "خودرو و راننده در اختیار مدیران و مهمانان سازمان."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "ترانسفر فرودگاهی",
+              "description": "هماهنگی ترانسفر با زمان پرواز برای مدیران و مهمانان سازمانی."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "سفر بین‌شهری",
+              "description": "سفرهای بین‌شهری برنامه‌ریزی‌شده برای سازمان‌ها."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://vanaxi.com/#website",
+      "url": "https://vanaxi.com/",
+      "name": "ونکسی",
+      "inLanguage": "fa-IR",
+      "publisher": { "@id": "https://vanaxi.com/#organization" },
+      "about": { "@id": "https://vanaxi.com/#organization" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://vanaxi.com/#webpage",
+      "url": "https://vanaxi.com/",
+      "name": "ونکسی | حمل و نقل سازمانی هوشمند",
+      "description": "ونکسی ارائه‌دهنده خدمات حمل‌ونقل سازمانی، سرویس پرسنل، ترانسفر فرودگاهی و سفرهای بین‌شهری با ناوگان باکیفیت، رانندگان آموزش‌دیده و مدیریت هزینه شفاف برای سازمان‌ها.",
+      "isPartOf": { "@id": "https://vanaxi.com/#website" },
+      "about": { "@id": "https://vanaxi.com/#organization" },
+      "inLanguage": "fa-IR",
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://vanaxi.com/assets/images/6a6ba3019788fb2728d17441_Prestige.png"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [".hero_title", ".hero_desc", ".heading-section", ".faq_question-text", ".faq_answer p"]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://vanaxi.com/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "خانه",
+          "item": "https://vanaxi.com/"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://vanaxi.com/#faq",
+      "isPartOf": { "@id": "https://vanaxi.com/#webpage" },
+      "inLanguage": "fa-IR",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "ونکسی چه خدماتی ارائه می‌دهد؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ونکسی خدمات حمل‌ونقل سازمانی شامل سرویس پرسنل، سفر در اختیار، ترانسفر فرودگاهی و سفرهای بین‌شهری را با ناوگان باکیفیت و رانندگان آموزش‌دیده ارائه می‌کند."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "سرویس پرسنل چگونه کار می‌کند؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "پس از مشاوره رایگان، مسیرها و شیفت‌های کارکنان شما طراحی می‌شود و سرویس به‌صورت منظم طبق برنامه سازمانی اجرا و پایش می‌گردد تا زمان رسیدن و هزینه شفاف بماند."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "آیا ترانسفر فرودگاهی و سفر بین‌شهری دارید؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "بله. ونکسی ترانسفر فرودگاهی برای مهمانان و مدیران سازمان و همچنین سفرهای بین‌شهری برنامه‌ریزی‌شده را با هماهنگی زمان پرواز یا جلسه شما پوشش می‌دهد."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "هزینه خدمات چگونه محاسبه می‌شود؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "هزینه بر اساس نوع سرویس، تعداد مسیرها، حجم تردد و سطح ناوگان محاسبه می‌شود. هدف ونکسی ارائه مدل شفاف و قابل پیش‌بینی برای بودجه‌بندی سازمانی است."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "چطور می‌توانم مشاوره رایگان بگیرم؟",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "از طریق دکمه مشاوره رایگان یا تماس با ما در سایت درخواست خود را ثبت کنید تا تیم ونکسی نیازهای سازمان شما را بررسی و بهترین سرویس را پیشنهاد دهد."
+          }
+        }
+      ]
+    }
+  ]
+}

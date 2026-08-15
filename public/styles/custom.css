@@ -1,0 +1,1216 @@
+
+/* Start styles for navbar animations and actions */
+/* Custom easing functions */
+:root {
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --transition-base: 0.4s var(--ease-in-out-quint);
+  --transition-fast: 0.3s var(--ease-in-out-quint);
+}
+
+/* Navbar hide on scroll - all breakpoints */
+.navbar {
+  transition: transform 0.4s var(--ease-in-out-quint),
+              opacity 0.3s var(--ease-in-out-quint);
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+}
+
+.navbar.is-hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Disable scroll hide when menu is open */
+.navbar.menu-open {
+  transition: none;
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Navbar - fixed on desktop, absolute on mobile when in services section */
+.navbar {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* Nav wrapper - ensure it's above menu wrapper */
+.nav_wrapper {
+  position: relative;
+  z-index: 10;
+}
+
+/* Menu wrapper animation */
+.menu_open-wrapper {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: opacity var(--transition-base),
+              visibility var(--transition-base),
+              transform var(--transition-base);
+  display: none !important;
+}
+
+.menu_open-wrapper.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  display: flex !important;
+}
+
+.menu_open-wrapper.is-open .menu_open-box {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Media queries for specific breakpoint adjustments */
+@media screen and (max-width: 991px) {
+  .navbar.is-services-section {
+    position: absolute;
+  }
+}
+
+/* Menu box animation */
+.menu_open-box {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.5s var(--ease-in-out-quint) 0.1s,
+              transform 0.5s var(--ease-in-out-quint) 0.1s;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Menu items staggered animation */
+.menu_first-list .menu_item {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.4s var(--ease-in-out-quint),
+              transform 0.4s var(--ease-in-out-quint);
+}
+
+.menu_open-wrapper.is-open .menu_first-list .menu_item:nth-child(1) {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.2s;
+}
+
+.menu_open-wrapper.is-open .menu_first-list .menu_item:nth-child(2) {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.3s;
+}
+
+.menu_open-wrapper.is-open .menu_first-list .menu_item:nth-child(3) {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.4s;
+}
+
+.menu_open-wrapper.is-open .menu_first-list .menu_item:nth-child(4) {
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: 0.5s;
+}
+
+/* Button group animation */
+.menu_btn-group {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-in-out-quint),
+              transform 0.5s var(--ease-in-out-quint);
+}
+
+.menu_open-wrapper.is-open .menu_btn-group {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+/* Burger icon animation */
+.nav_burger {
+  position: relative;
+  z-index: 100;
+}
+
+.burger-icon,
+.back-icon,
+.close-icon.is-step1 {
+  position: absolute;
+  transition: opacity var(--transition-fast),
+              transform var(--transition-fast);
+  z-index: 101;
+}
+
+.burger-icon.is-hidden {
+  opacity: 0;
+  transform: scale(0.8) rotate(90deg);
+  pointer-events: none;
+}
+
+.nav_burger.is-menu-open .burger-icon {
+  opacity: 0;
+  transform: scale(0.8) rotate(90deg);
+  pointer-events: none;
+}
+
+.nav_burger.is-menu-open .close-icon.is-step1 {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  display: flex !important;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Close icon animation - override display:none from current-styles.css */
+.close-icon.is-step1 {
+  opacity: 0;
+  transform: scale(0.8) rotate(-90deg);
+  pointer-events: none;
+  display: flex !important;
+  cursor: pointer;
+}
+
+.close-icon.is-step1.is-visible {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  pointer-events: auto;
+  display: flex !important;
+  cursor: pointer;
+}
+
+.nav_burger.is-menu-open .close-icon.is-step1 {
+  cursor: pointer;
+}
+
+/* Back icon animation - override display:none from current-styles.css */
+.back-icon {
+  opacity: 0;
+  transform: scale(0.8) rotate(-90deg);
+  pointer-events: none;
+  display: flex !important;
+}
+
+.back-icon.is-visible {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  pointer-events: auto;
+  display: flex !important;
+}
+
+/* Sub-menu animations - slide from right */
+.menu_open.is-services,
+.menu_open.is-about {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.35s var(--ease-in-out-quint),
+              opacity 0.3s var(--ease-in-out-quint);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  pointer-events: none;
+  display: flex !important;
+}
+
+.menu_open.is-services.is-active,
+.menu_open.is-about.is-active {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  display: flex !important;
+}
+
+/* Submenu fade-out only (for closing entire menu) */
+.menu_open.is-services.is-closing,
+.menu_open.is-about.is-closing {
+  transform: translateX(0) !important;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-in-out-quint) !important;
+}
+
+/* Main menu - gets pushed left */
+.menu_open.is-main {
+  transition: transform 0.35s var(--ease-in-out-quint);
+  position: relative;
+  will-change: transform;
+}
+
+.menu_open.is-main.is-pushed {
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+/* Nav logo and title animations - no conflict */
+.nav_logo-link-center {
+  transition: opacity 0.2s var(--ease-in-out-quint),
+              transform 0.2s var(--ease-in-out-quint),
+              filter 0.2s var(--ease-in-out-quint);
+  position: absolute;
+  filter: blur(0px);
+}
+
+.nav_logo-link-center.is-hidden {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+  filter: blur(8px);
+}
+
+/* Menu title - override display:none from current-styles.css */
+.menu_title {
+  transition: opacity 0.2s var(--ease-in-out-quint),
+              transform 0.2s var(--ease-in-out-quint);
+  position: absolute;
+  display: block !important;
+}
+
+.menu_title.is-services,
+.menu_title.is-about {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.menu_title.is-services.is-visible,
+.menu_title.is-about.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Nav account-mob icon animations */
+.nav_account-mob {
+  position: relative;
+}
+
+.nav_account-mob .icon-24 {
+  transition: opacity 0.3s var(--ease-in-out-quint),
+              transform 0.3s var(--ease-in-out-quint);
+}
+
+.nav_account-mob .icon-24.is-hidden {
+  opacity: 0;
+  transform: scale(0.8) rotate(90deg);
+  pointer-events: none;
+}
+
+.nav_account-mob .close-icon[icon-action="close-layers"] {
+  transition: opacity 0.3s var(--ease-in-out-quint),
+              transform 0.3s var(--ease-in-out-quint);
+  opacity: 0;
+  transform: scale(0.8) rotate(-90deg);
+  pointer-events: none;
+  position: absolute;
+  cursor: pointer;
+  display: flex !important;
+}
+
+.nav_account-mob .close-icon[icon-action="close-layers"].is-visible {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  pointer-events: auto;
+  cursor: pointer;
+  display: flex !important;
+}
+
+/* Close layers icon in nav_burger - hide when submenu is open */
+.nav_burger.is-submenu-open [icon-action="close-main"] {
+  opacity: 0;
+  transform: scale(0.8) rotate(90deg);
+  pointer-events: none;
+}
+
+.nav_burger.is-submenu-open [icon-action="back"] {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  pointer-events: auto;
+}
+
+/* Menu item hover effect */
+.menu_item {
+  transition: background-color 0.2s ease,
+              padding-left 0.2s ease;
+}
+
+.menu_item:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Services cards staggered animation */
+.nav_services-card {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s var(--ease-in-out-quint),
+              transform 0.4s var(--ease-in-out-quint);
+}
+
+/* Mobile menu services cards - animated on open */
+.menu_open.is-services.is-active .nav_services-card:nth-child(1),
+.menu_open.is-about.is-active .nav_services-card:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.menu_open.is-services.is-active .nav_services-card:nth-child(2),
+.menu_open.is-about.is-active .nav_services-card:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.menu_open.is-services.is-active .nav_services-card:nth-child(3),
+.menu_open.is-about.is-active .nav_services-card:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+.menu_open.is-services.is-active .nav_services-card:nth-child(4),
+.menu_open.is-about.is-active .nav_services-card:nth-child(4) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+/* End styles for navbar animations and actions */
+
+/* --- START: Desktop Services Scroll Accordion --- */
+@media screen and (min-width: 992px) {
+  .services_box-desktop .services_wrapper {
+    align-items: start;
+  }
+
+  .services_box-desktop .services_item {
+    cursor: pointer;
+  }
+
+  /* Image column stays fixed size so tab open/close cannot shove it */
+  .services_box-desktop .services_img-wrapper-desk {
+    position: relative !important;
+    align-self: start;
+    width: 100%;
+    height: 90vh !important;
+    min-height: 90vh !important;
+    max-height: 90vh !important;
+    overflow: hidden !important;
+  }
+
+  .services_box-desktop .services_img-wrapper-desk .services_img {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    display: block !important;
+    opacity: 0;
+    z-index: 0;
+    transform: none !important;
+    translate: none !important;
+    transition: opacity 0.9s ease-in-out !important;
+    pointer-events: none;
+    will-change: opacity;
+  }
+
+  .services_box-desktop .services_img-wrapper-desk .services_img.is-active {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .services_box-desktop .services_item-title-holder {
+    transition:
+      color 0.35s var(--ease-in-out-quint),
+      opacity 0.35s var(--ease-in-out-quint);
+  }
+
+  /* Equal 2rem vertical padding on the box; bottom only while open */
+  .services_box-desktop .services_item-inside-box {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+    transition: padding-bottom 0.45s var(--ease-in-out-quint);
+  }
+
+  .services_box-desktop .services_item.is-open .services_item-inside-box {
+    padding-bottom: 1rem;
+  }
+
+  /* Kill default heading margins that unbalance the top padding */
+  .services_box-desktop .services_item-title-holder .h5,
+  .services_box-desktop .services_item-title-holder h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* Keep content internal rhythm; avoid extra collapse gaps */
+  .services_box-desktop .services_item-content-holder > :first-child {
+    margin-top: 0;
+  }
+
+  .services_box-desktop .services_item-content-holder > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Match Webflow layout when content is open */
+  .services_box-desktop .services_item-content-holder {
+    display: flex !important;
+    flex-flow: column;
+    gap: 1rem;
+    direction: rtl;
+    opacity: 1;
+    overflow: hidden;
+    max-height: 60rem;
+    transition:
+      max-height 0.45s var(--ease-in-out-quint),
+      opacity 0.35s ease;
+  }
+
+  .services_box-desktop .services_item-content-holder.is-not-active {
+    display: flex !important;
+    flex-flow: column;
+    gap: 1rem;
+    direction: rtl;
+    max-height: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /*
+   * Spacer sits outside inside-box. Keep it collapsed on desktop so it
+   * doesn't double the bottom 2rem padding before the progress bar.
+   */
+  .services_box-desktop .spacer-2rem.is-services {
+    display: block;
+    min-height: 0 !important;
+    height: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .services_box-desktop .services_progress {
+    width: 100% !important;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: opacity 0.3s var(--ease-in-out-quint);
+    will-change: transform;
+  }
+
+  .services_box-desktop .services_progress.is-hidden {
+    display: block !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .services_box-desktop .services_progress.is-visible {
+    display: block !important;
+    opacity: 1;
+  }
+}
+/* --- END: Desktop Services Scroll Accordion --- */
+
+/* --- START: FAQ Accordion --- */
+.faq_question-group .icon-24 {
+  flex: 0 0 auto;
+  transition: transform 0.35s ease;
+  transform-origin: center center;
+}
+
+.faq_item.is-active .faq_question-group .icon-24,
+.faq_question-group .icon-24.is-open {
+  transform: rotate(45deg);
+}
+
+/*
+  Exact height is set by script.js (scrollHeight) so open/close
+  doesn't overshoot from a large max-height and "jump".
+*/
+.faq_answer,
+.faq_answer.is-hide {
+  display: block !important;
+  box-sizing: border-box;
+  overflow: hidden !important;
+  height: 0 !important;
+  max-height: none !important;
+  opacity: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
+  transition: height 0.35s ease, opacity 0.28s ease;
+}
+
+.faq_item.is-active .faq_answer,
+.faq_item.is-active .faq_answer.is-hide {
+  opacity: 0.57;
+  pointer-events: auto;
+}
+
+/* Spacers inside a closed answer must not reserve space */
+.faq_answer.is-hide .faq-spacer-1-25rem,
+.faq_answer.is-hide [class*="faq-spacer"] {
+  min-height: 0 !important;
+  height: 0 !important;
+  overflow: hidden;
+}
+/* --- END: FAQ Accordion --- */
+
+/* --- START: Why Image First-Load Scale --- */
+@media screen and (max-width: 991px) {
+  .why_image-wrapper {
+    overflow: hidden;
+  }
+
+  .section_why .why_img {
+    will-change: transform;
+    transform-origin: center center;
+  }
+}
+/* --- END: Why Image First-Load Scale --- */
+
+/* --- START: Why Center Content Fade In (Desktop) --- */
+@media screen and (min-width: 992px) {
+  .section_why .why_fader-up {
+    display: none !important;
+  }
+
+  .section_why .why_in-center-fixed,
+  .section_why .why_in-center-content {
+    will-change: opacity;
+  }
+}
+/* --- END: Why Center Content Fade In (Desktop) --- */
+
+/* --- START: Process Steps Sticky Scroll --- */
+.section_process .process_box {
+  position: relative;
+  overflow: hidden;
+}
+
+.section_process .process_heading {
+  z-index: 3;
+}
+
+.section_process .process_center {
+  overflow: hidden;
+  position: relative;
+}
+
+.section_process .process_steps-track {
+  will-change: transform;
+}
+
+.section_process .process_step-wrapper {
+  will-change: opacity;
+}
+
+.section_process .process_step-wrapper.is-inactive {
+  pointer-events: none;
+}
+/* --- END: Process Steps Sticky Scroll --- */
+
+/* --- START: Story Card — Desktop only (≥992) --- */
+/*
+  Nothing in this block applies under 991px — Webflow owns tablet/mobile
+  story grid, components, and children. Desktop pin + hover + featured visuals only.
+*/
+@media screen and (min-width: 992px) {
+  .section_story .story_content {
+    overflow: hidden;
+  }
+
+  .section_story .story_gray-overlay {
+    transition: background-color 0.35s ease;
+    pointer-events: none;
+  }
+
+  .section_story .story_tag {
+    transition: color 0.35s ease, opacity 0.35s ease;
+  }
+
+  .section_story .story_logo,
+  .section_story .story_logo-black {
+    position: absolute;
+    z-index: 3;
+    transition: filter 0.35s ease, opacity 0.35s ease;
+    filter: none;
+  }
+
+  .section_story .story_logo-white {
+    display: none !important;
+  }
+
+  .section_story .story_item:hover .story_gray-overlay,
+  .section_story .story_item:focus-visible .story_gray-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .section_story .story_item:hover .story_tag,
+  .section_story .story_item:focus-visible .story_tag {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .section_story .story_item:hover .story_logo,
+  .section_story .story_item:hover .story_logo-black,
+  .section_story .story_item:focus-visible .story_logo,
+  .section_story .story_item:focus-visible .story_logo-black {
+    filter: brightness(0) invert(1);
+  }
+
+  .section_story .story_item.featured:hover .story_heading.featured,
+  .section_story .story_item.featured:focus-visible .story_heading.featured {
+    color: #fff;
+  }
+
+  .section_story .story_video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    isolation: isolate;
+    pointer-events: none;
+  }
+
+  .section_story .story_video .story_video-el,
+  .section_story .story_video video {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .section_story .story_image {
+    z-index: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .section_story .story_item:hover .story_image,
+  .section_story .story_item:focus-visible .story_image,
+  .section_story .story_item.featured .story_image,
+  .section_story .is-story-featured .story_image,
+  .section_story .story_featured-slot .story_image {
+    opacity: 0;
+  }
+
+  .section_story .story_grid > .is-story-featured,
+  .section_story .story_featured-slot {
+    grid-column: 1 / 2;
+    align-self: stretch;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
+  }
+
+  .section_story .story_grid > .is-story-featured .story_item,
+  .section_story .story_featured-slot .story_item,
+  .section_story .story_grid > .is-story-featured {
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  .section_story .story_item.featured .story_content,
+  .section_story .is-story-featured .story_content,
+  .section_story .story_featured-slot .story_content {
+    position: sticky;
+    top: 5vh;
+    width: 100%;
+    height: 90vh;
+    max-height: 90vh;
+    aspect-ratio: auto;
+    overflow: hidden;
+  }
+
+  .section_story .story_content > .story_heading {
+    display: none;
+  }
+
+  .section_story .story_item.featured .story_content > .story_heading,
+  .section_story .is-story-featured .story_content > .story_heading,
+  .section_story .story_featured-slot .story_content > .story_heading {
+    display: block;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 4;
+    color: #fff;
+    max-width: 90%;
+  }
+
+  .section_story .story_item.featured > .story_heading,
+  .section_story .is-story-featured > .story_heading,
+  .section_story .is-story-featured .story_item > .story_heading,
+  .section_story .story_featured-slot > .story_heading,
+  .section_story .story_featured-slot .story_item > .story_heading {
+    display: none;
+  }
+
+  .section_story .story_item.featured .story_gray-overlay,
+  .section_story .is-story-featured .story_gray-overlay,
+  .section_story .story_featured-slot .story_gray-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .section_story .story_item.featured .story_tag,
+  .section_story .is-story-featured .story_tag,
+  .section_story .story_featured-slot .story_tag {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .section_story .story_item.featured .story_logo,
+  .section_story .story_item.featured .story_logo-black,
+  .section_story .is-story-featured .story_logo,
+  .section_story .is-story-featured .story_logo-black,
+  .section_story .story_featured-slot .story_logo,
+  .section_story .story_featured-slot .story_logo-black {
+    filter: brightness(0) invert(1);
+  }
+
+  .section_story .story_item.featured .story_video,
+  .section_story .story_item.featured .story_video .story_video-el,
+  .section_story .story_item.featured .story_video video,
+  .section_story .is-story-featured .story_video,
+  .section_story .is-story-featured .story_video .story_video-el,
+  .section_story .is-story-featured .story_video video,
+  .section_story .story_featured-slot .story_video,
+  .section_story .story_featured-slot .story_video .story_video-el,
+  .section_story .story_featured-slot .story_video video {
+    transform: scale(1);
+    transition: transform 0.55s ease;
+    will-change: transform;
+  }
+
+  .section_story .story_item.featured:hover .story_video,
+  .section_story .story_item.featured:hover .story_video .story_video-el,
+  .section_story .story_item.featured:hover .story_video video,
+  .section_story .is-story-featured:hover .story_video,
+  .section_story .is-story-featured:hover .story_video .story_video-el,
+  .section_story .is-story-featured:hover .story_video video,
+  .section_story .is-story-featured:focus-visible .story_video,
+  .section_story .is-story-featured:focus-visible .story_video .story_video-el,
+  .section_story .is-story-featured:focus-visible .story_video video,
+  .section_story .story_featured-slot:hover .story_video,
+  .section_story .story_featured-slot:hover .story_video .story_video-el,
+  .section_story .story_featured-slot:hover .story_video video {
+    transform: scale(1.08);
+  }
+
+  .section_story .story_video-url {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}
+/* --- END: Story Card — Desktop only (≥992) --- */
+
+/* Story videos — all breakpoints (Webflow sets video z-index: -100) */
+.section_story .story_video {
+  isolation: isolate;
+}
+
+.section_story .story_video > video,
+.section_story .story_video .story_video-el {
+  z-index: 1;
+  object-fit: cover;
+}
+
+.section_story .story_image {
+  z-index: 0;
+}
+
+.section_story .story_item.featured .story_image,
+.section_story .is-story-featured .story_image,
+.section_story .story_featured-slot .story_image,
+.section_story [class*="d6f6e90e"] .story_image {
+  opacity: 0;
+}
+
+/* --- START: Story mobile (≤991) --- */
+@media screen and (max-width: 991px) {
+  /* Single row, no wrap — scroll horizontally if needed */
+  .section_story .story_grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(70vw, 1fr);
+    grid-template-columns: none;
+    grid-template-rows: auto;
+    align-items: start;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .section_story .story_grid > * {
+    min-width: 0;
+  }
+
+  .section_story .story_item.featured .story_gray-overlay,
+  .section_story .is-story-featured .story_gray-overlay,
+  .section_story .story_featured-slot .story_gray-overlay,
+  .section_story [class*="d6f6e90e"] .story_gray-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .section_story .story_item.featured .story_tag,
+  .section_story .is-story-featured .story_tag,
+  .section_story .story_featured-slot .story_tag,
+  .section_story [class*="d6f6e90e"] .story_tag {
+    color: #fff;
+    opacity: 1;
+  }
+
+  .section_story .story_item.featured .story_logo,
+  .section_story .story_item.featured .story_logo-black,
+  .section_story .is-story-featured .story_logo,
+  .section_story .is-story-featured .story_logo-black,
+  .section_story .story_featured-slot .story_logo,
+  .section_story .story_featured-slot .story_logo-black,
+  .section_story [class*="d6f6e90e"] .story_logo,
+  .section_story [class*="d6f6e90e"] .story_logo-black {
+    filter: brightness(0) invert(1);
+  }
+}
+/* --- END: Story mobile (≤991) --- */
+
+/* --- START: Footer Link Hover Background --- */
+.footer_link {
+  position: relative;
+  isolation: isolate;
+  z-index: 0;
+  transition:
+    transform 0.3s var(--ease-in-out-expo),
+    opacity 0.3s var(--ease-in-out-expo);
+}
+
+.footer_link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--colors--border);
+  opacity: 1;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.3s var(--ease-in-out-expo);
+  pointer-events: none;
+}
+
+.footer_link:hover,
+.footer_link:focus-visible {
+  opacity: 1;
+}
+
+.footer_link:hover::before,
+.footer_link:focus-visible::before {
+  transform: scaleY(1);
+}
+/* --- END: Footer Link Hover Background --- */
+
+/* --- START: Footer Social Item Hover Background --- */
+/*
+  Item already has a background, so the scale fill sits ABOVE that paint
+  (z-index: 0) and UNDER the icon (children z-index: 1).
+*/
+.footer_social-item {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  z-index: 0;
+  transition: opacity 0.3s var(--ease-in-out-expo);
+}
+
+.footer_social-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #d9deeb;
+  opacity: 1;
+  transform: scaleY(0);
+  transform-origin: bottom center;
+  transition: transform 0.3s var(--ease-in-out-expo);
+  pointer-events: none;
+}
+
+.footer_social-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+.footer_social-item:hover,
+.footer_social-item:focus-visible {
+  opacity: 1;
+}
+
+.footer_social-item:hover::before,
+.footer_social-item:focus-visible::before {
+  transform: scaleY(1);
+}
+/* --- END: Footer Social Item Hover Background --- */
+
+/* --- START: Footer Clouds Drift Loop --- */
+@keyframes footer-cloud-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.85;
+  }
+  25% {
+    transform: translate(18px, -12px);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-10px, -20px);
+    opacity: 0.9;
+  }
+  75% {
+    transform: translate(-16px, -6px);
+    opacity: 0.95;
+  }
+}
+
+@keyframes footer-cloud-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.8;
+  }
+  25% {
+    transform: translate(-14px, -14px);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate(12px, -8px);
+    opacity: 1;
+  }
+  75% {
+    transform: translate(20px, -16px);
+    opacity: 0.88;
+  }
+}
+
+.footer_cloud1,
+.footer_cloud2 {
+  will-change: transform, opacity;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.footer_cloud1 {
+  animation-name: footer-cloud-drift-a;
+  animation-duration: 14s;
+}
+
+.footer_cloud2 {
+  animation-name: footer-cloud-drift-b;
+  animation-duration: 18s;
+  animation-delay: -4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer_cloud1,
+  .footer_cloud2 {
+    animation: none;
+  }
+}
+/* --- END: Footer Clouds Drift Loop --- */
+
+/* --- START: SEO Show More / Less --- */
+.seo_text {
+  overflow: hidden;
+  transition:
+    height 0.45s var(--ease-in-out-expo),
+    opacity 0.35s var(--ease-in-out-expo);
+}
+
+.seo_gradient {
+  transition: opacity 0.35s var(--ease-in-out-expo);
+  pointer-events: none;
+}
+
+.seo_link {
+  cursor: pointer;
+  transition: opacity 0.3s var(--ease-in-out-expo);
+  user-select: none;
+}
+
+.seo_link .icon-24 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s var(--ease-in-out-expo);
+  transform-origin: center center;
+}
+
+.seo_wrapper.is-seo-open .seo_text {
+  opacity: 1;
+}
+
+.seo_wrapper.is-seo-open .seo_gradient {
+  opacity: 0;
+}
+
+.seo_wrapper.is-seo-open .seo_link {
+  position: relative;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  margin-top: 0.75rem;
+}
+
+.seo_wrapper.is-seo-open .seo_link .icon-24 {
+  transform: rotate(180deg);
+}
+/* --- END: SEO Show More / Less --- */
+
+/* --- START: Accessibility Foundation --- */
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 0;
+  z-index: 1000000;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: #111;
+  color: #fff;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0.75rem);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+[role="button"]:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.button:focus-visible,
+.text-link-wrapper:focus-visible,
+.seo_link:focus-visible,
+.faq_question-group:focus-visible,
+.services_suit-item:focus-visible,
+.footer_link:focus-visible,
+.footer_social-item:focus-visible,
+.burger-icon:focus-visible,
+.close-icon:focus-visible,
+.back-icon:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+/* Touch targets for text/links only — do not force 44px on Webflow nav icons */
+.seo_link,
+.faq_question-group,
+.footer_social-item {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.burger-icon,
+.close-icon,
+.back-icon,
+.seo_link,
+.faq_question-group {
+  cursor: pointer;
+}
+
+.menu_open-wrapper[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  .navbar,
+  .menu_open-wrapper,
+  .menu_open-box,
+  .menu_open,
+  .seo_text,
+  .seo_gradient,
+  .seo_link,
+  .seo_link .icon-24,
+  .footer_link,
+  .footer_social-item,
+  .button {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .footer_cloud1,
+  .footer_cloud2 {
+    animation: none !important;
+  }
+}
+/* --- END: Accessibility Foundation --- */
+
+/* WCAG AA edge — smallest change that passes */
+@media screen and (max-width: 991px) {
+  .services_tab {
+    opacity: 1;
+  }
+
+  .services_tab:not(.w--current) .services_tab-text {
+    color: #707683;
+  }
+
+  .services_tab.w--current {
+    opacity: 1;
+  }
+}
+
+.footer .text-small.opacity-50,
+.process_stat .text-small.opacity-50 {
+  opacity: 0.56;
+}
+
+/* Inactive service titles: 24px bold needs 3:1 (was 2.03 at 0.3) */
+.services_item-title-holder.is-not-active {
+  opacity: 0.44;
+}
+
+
