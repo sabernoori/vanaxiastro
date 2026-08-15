@@ -1141,9 +1141,7 @@ textarea:focus:not(:focus-visible) {
 }
 
 /* Touch targets for text/links only — do not force 44px on Webflow nav icons */
-.seo_link,
-.faq_question-group,
-.footer_social-item {
+.seo_link {
   min-width: 44px;
   min-height: 44px;
 }
@@ -1188,24 +1186,119 @@ textarea:focus:not(:focus-visible) {
 }
 /* --- END: Accessibility Foundation --- */
 
-/* WCAG AA edge — smallest change that passes */
+.services_tab {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 991px) {
   .services_tab {
-    opacity: 1;
+    padding: 0.5rem 1rem;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--colors--white);
+    opacity: 0.3;
+    white-space: nowrap;
   }
 
   .services_tab:not(.w--current) .services_tab-text {
-    color: #707683;
+    color: inherit;
   }
 
   .services_tab.w--current {
+    border-radius: 0.5rem;
+    background-color: var(--colors--blueish-gray);
     opacity: 1;
+    color: var(--colors--blue-lighter);
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .services_tab {
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
   }
 }
 
 .footer .text-small.opacity-50,
 .process_stat .text-small.opacity-50 {
   opacity: 0.56;
+}
+
+/* Restore designed sizes that a11y min-height had stretched */
+.footer_social-item {
+  display: flex;
+  width: 100%;
+  height: 2.5rem;
+  min-width: 4.5rem;
+  min-height: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--colors--border);
+}
+
+@media screen and (max-width: 767px) {
+  .footer_social-item {
+    min-width: auto;
+  }
+}
+
+.footer_designer-wrapper {
+  position: absolute;
+  display: flex;
+  padding-bottom: 1rem;
+  justify-content: center;
+  align-items: flex-end;
+  width: clamp(0rem, -2rem + 100vw, 100rem);
+}
+
+@media screen and (max-width: 991px) {
+  .footer_designer-wrapper {
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+}
+
+.faq_question-group {
+  min-height: 0;
+  height: auto;
+}
+
+.story_item {
+  gap: 0;
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+}
+
+.text-link-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--colors--blue-lighter);
+  text-decoration: none;
+}
+
+/* Logos: one stories link on desktop (top), one on mobile (bottom) */
+.logos_head-wrapper.is-bottom {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .logos_head-wrapper .text-link-wrapper.show-dt,
+  .logos_head-wrapper.is-bottom .logos_heading.show-dt {
+    display: none;
+  }
+
+  .logos_head-wrapper.is-bottom {
+    display: flex;
+  }
 }
 
 /* Inactive service titles: 24px bold needs 3:1 (was 2.03 at 0.3) */
