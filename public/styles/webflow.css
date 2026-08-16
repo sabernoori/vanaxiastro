@@ -3274,6 +3274,10 @@ a {
   opacity: .5;
 }
 
+.faq_heading-wrapper .opacity-50 {
+  opacity: .56;
+}
+
 .paragraph {
   direction: rtl;
 }

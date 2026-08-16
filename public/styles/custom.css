@@ -1371,13 +1371,21 @@ textarea:focus:not(:focus-visible) {
   font-weight: 600;
 }
 
-/* Kashida fills lines; alignment stays in CSS so pages can override it. */
+/* Kashida fills lines; justification only after JS confirms 3+ lines. */
 [data-kashida] {
+  text-align: start;
+}
+
+[data-kashida][data-kashida-ready="1"]:not([data-kashida-skip]) {
   text-align: justify;
   text-align-last: right;
 }
 
 [data-kashida-align="center"] {
+  text-align: center;
+}
+
+[data-kashida-align="center"][data-kashida-ready="1"]:not([data-kashida-skip]) {
   text-align: justify;
   text-align-last: center;
 }

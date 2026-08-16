@@ -4,9 +4,10 @@
  * Opt-in:  <p data-kashida>…</p>
  * Off:     <html data-kashida="off">  or  Kashida.destroy()
  *
- * Alignment is CSS/HTML, not this script:
- *   [data-kashida]                 justify, last line start/right
- *   [data-kashida-align="center"]  justify, last line centered
+ * Alignment is CSS, gated by this script:
+ *   3+ lines  [data-kashida]                 justify, last line start/right
+ *   3+ lines  [data-kashida-align="center"]  justify, last line centered
+ *   1–2 lines [data-kashida-skip]            no justify, no tatweels
  */
 (function (root) {
   'use strict';
@@ -15,9 +16,11 @@
   var ZWNJ = '\u200C';
   var SELECTOR = '[data-kashida]';
   var SRC_ATTR = 'data-kashida-src';
+  var SKIP_ATTR = 'data-kashida-skip';
   var MAX_PER_JOIN = 5;
   var EPSILON_EM = 0.06;
   var MIN_LAST_WORDS = 4;
+  var MIN_LINES = 3;
   var NBSP = '\u00A0';
   var TATWEEL_RE = /\u0640/g;
 
@@ -358,6 +361,13 @@
     el._kashidaW = 0;
   }
 
+  function finishPlain(el, src, width) {
+    restoreSrc(el, src);
+    el.setAttribute(SKIP_ATTR, '');
+    el._kashidaW = width;
+    el.setAttribute('data-kashida-ready', '1');
+  }
+
   function applyElement(el) {
     if (isOff()) return;
     if (el._kashidaInView === false) return;
@@ -384,11 +394,15 @@
 
     el.textContent = src;
 
-    var lines = rebalanceOrphans(splitLiveLines(el, lineThresholdFrom(cs)), MIN_LAST_WORDS);
-    if (lines.length < 2) {
-      restoreSrc(el, src);
-      el._kashidaW = width;
-      el.setAttribute('data-kashida-ready', '1');
+    var natural = splitLiveLines(el, lineThresholdFrom(cs));
+    if (natural.length < MIN_LINES) {
+      finishPlain(el, src, width);
+      return;
+    }
+
+    var lines = rebalanceOrphans(natural, MIN_LAST_WORDS);
+    if (lines.length < MIN_LINES) {
+      finishPlain(el, src, width);
       return;
     }
 
@@ -431,6 +445,7 @@
       el.textContent = working;
     }
 
+    el.removeAttribute(SKIP_ATTR);
     el._kashidaW = width;
     el.setAttribute('data-kashida-ready', '1');
   }
@@ -584,6 +599,7 @@
       el.removeEventListener('copy', onCopy);
       el.removeAttribute('data-kashida-bound');
       el.removeAttribute('data-kashida-ready');
+      el.removeAttribute(SKIP_ATTR);
       el._kashidaQueued = 0;
       el._kashidaW = 0;
       el._kashidaInView = undefined;
