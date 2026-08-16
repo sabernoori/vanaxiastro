@@ -97,15 +97,15 @@
       //
       //  card | fadeIn | fadeOut | fadeInDur | yAt | yDur | yFrom | yTo
       //  -----|--------|---------|-----------|-----|------|-------|------
-      //    1  |    0   |   16    |    12     |  0  |  30  |  100  | -100
-      //    2  |   30   |   47    |    12     | 25  |  30  |   50  | -150
-      //    3  |   63   |   78    |    12     | 50  |  30  |  -50  | -250
-      //    4  |   90   |  stay   |    15     | 50  |  50  |  -80  | -100
+      //    1  |    0   |   16    |    15     |  0  |  30  |  100  | -100
+      //    2  |   30   |   47    |    15     | 25  |  30  |   50  | -150
+      //    3  |   63   |   78    |    15     | 50  |  30  |  -50  | -250
+      //    4  |   90   |  stay   |    15     | 70  |  30  |   50  | -150
       const MOTION = [
         { fadeIn: 0,  fadeOut: 16,   fadeInDur: 15, yAt: 0,  yDur: 30, yFrom: 100,  yTo: -100 },
         { fadeIn: 30, fadeOut: 47,   fadeInDur: 15, yAt: 25, yDur: 30, yFrom: 50,   yTo: -150 },
-        { fadeIn: 63, fadeOut: 78,   fadeInDur: 15, yAt: 50, yDur: 30, yFrom: -50,  yTo: -150 },
-        { fadeIn: 90, fadeOut: null, fadeInDur: 15, yAt: 50, yDur: 50, yFrom: -80,  yTo: -100, titleY: 12 }
+        { fadeIn: 65, fadeOut: 78,   fadeInDur: 15, yAt: 50, yDur: 30, yFrom: -50,  yTo: -250 },
+        { fadeIn: 90, fadeOut: null, fadeInDur: 15, yAt: 60, yDur: 30, yFrom: 50,   yTo: -150 }
       ];
 
       gsap.set(
