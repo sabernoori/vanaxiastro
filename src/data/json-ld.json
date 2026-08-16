@@ -23,9 +23,15 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "sales",
-        "availableLanguage": ["fa"],
-        "url": "https://vanaxi.com/#process"
+        "telephone": "+982188617181",
+        "availableLanguage": ["fa", "fa-IR"],
+        "url": "https://vanaxi.com/#process",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Iran"
+        }
       },
+      "telephone": "+982188617181",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "خدمات حمل‌ونقل سازمانی ونکسی",
@@ -83,6 +89,9 @@
       "isPartOf": { "@id": "https://vanaxi.com/#website" },
       "about": { "@id": "https://vanaxi.com/#organization" },
       "inLanguage": "fa-IR",
+      "dateModified": "2026-08-16",
+      "mainEntity": { "@id": "https://vanaxi.com/#faq" },
+      "breadcrumb": { "@id": "https://vanaxi.com/#breadcrumb" },
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://vanaxi.com/assets/images/6a6ba3019788fb2728d17441_Prestige.png"

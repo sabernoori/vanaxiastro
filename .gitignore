@@ -6,6 +6,7 @@ dist/
 # Local scrape / audit tooling (not shipped)
 _source/
 setup-assets.mjs
+.tmp/
 
 # Vercel CLI link (contains project IDs)
 .vercel

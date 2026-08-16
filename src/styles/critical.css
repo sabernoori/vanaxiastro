@@ -38,7 +38,7 @@ body {
 
 @font-face {
   font-family: Ravi;
-  src: url("/assets/fonts/6a6a14762de583d7adeb8649_Ravi-Regular.ttf") format("truetype");
+  src: url("/assets/fonts/Ravi-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -46,7 +46,7 @@ body {
 
 @font-face {
   font-family: Ravi;
-  src: url("/assets/fonts/6a6a14765b9bfb281b659319_Ravi-SemiBold.ttf") format("truetype");
+  src: url("/assets/fonts/Ravi-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -108,6 +108,13 @@ a {
   line-height: 1.2;
   text-decoration: none;
   transform: translateY(-150%);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0.75rem);
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .navbar {

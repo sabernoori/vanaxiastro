@@ -1042,7 +1042,18 @@
   }
 
   function setExpandedState(item, expanded) {
-    item.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    const question = item.querySelector('.faq_question-group');
+    const answer = item.querySelector('.faq_answer');
+    const value = expanded ? 'true' : 'false';
+    item.removeAttribute('role');
+    item.removeAttribute('tabindex');
+    item.removeAttribute('aria-expanded');
+    item.removeAttribute('aria-controls');
+    if (question) question.setAttribute('aria-expanded', value);
+    if (answer) {
+      if (expanded) answer.removeAttribute('aria-hidden');
+      else answer.setAttribute('aria-hidden', 'true');
+    }
   }
 
   function closeItem(item, immediate) {
@@ -1079,27 +1090,28 @@
     const answerId = 'faq-answer-' + (index + 1);
 
     item.classList.remove('is-active');
-    item.setAttribute('role', 'button');
-    item.setAttribute('tabindex', '0');
-    item.setAttribute('aria-expanded', 'false');
-    if (question) {
-      question.removeAttribute('role');
-      question.removeAttribute('tabindex');
-      question.removeAttribute('aria-expanded');
-      if (!question.id) question.id = 'faq-question-' + (index + 1);
-    }
+    item.removeAttribute('role');
+    item.removeAttribute('tabindex');
+    item.removeAttribute('aria-expanded');
+    item.removeAttribute('aria-controls');
 
     if (parts.icon) parts.icon.classList.remove('is-open');
     if (parts.answer) {
       parts.answer.id = answerId;
       parts.answer.setAttribute('role', 'region');
-      if (question) {
-        parts.answer.setAttribute('aria-labelledby', question.id);
-        item.setAttribute('aria-controls', answerId);
-      }
+      parts.answer.setAttribute('aria-hidden', 'true');
       clearHeightListener(parts.answer);
       parts.answer.classList.add('is-hide');
       setAnswerHeight(parts.answer, '0px');
+    }
+
+    if (question) {
+      if (!question.id) question.id = 'faq-question-' + (index + 1);
+      question.setAttribute('role', 'button');
+      question.setAttribute('tabindex', '0');
+      question.setAttribute('aria-expanded', 'false');
+      question.setAttribute('aria-controls', answerId);
+      if (parts.answer) parts.answer.setAttribute('aria-labelledby', question.id);
     }
 
     const onActivate = (event) => {
@@ -1109,10 +1121,12 @@
     };
 
     item.addEventListener('click', onActivate);
-    item.addEventListener('keydown', (event) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      onActivate(event);
-    });
+    if (question) {
+      question.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        onActivate(event);
+      });
+    }
   }
 
   function initFaqList(list) {
@@ -1498,6 +1512,8 @@
     link.setAttribute('role', 'button');
     link.setAttribute('tabindex', '0');
     link.setAttribute('aria-expanded', 'false');
+    if (!textEl.id) textEl.id = 'seo-expand-text';
+    link.setAttribute('aria-controls', textEl.id);
     setLabel(link, LABEL_MORE);
 
     // Ensure collapsed height matches Webflow default
@@ -1602,8 +1618,14 @@
   }
 
   function enhanceStoryCards() {
+    document.querySelectorAll('.story_heading.featured').forEach((heading) => {
+      heading.setAttribute('aria-hidden', 'true');
+    });
+    document.querySelectorAll('.story_video video, .story_video-url').forEach((el) => {
+      el.setAttribute('aria-hidden', 'true');
+    });
     document.querySelectorAll('.section_story .story_item').forEach((card) => {
-      const link = card.querySelector('a[href]');
+      const link = card.matches('a[href]') ? card : card.querySelector('a[href]');
       if (link) return;
       if (!card.hasAttribute('tabindex')) card.setAttribute('tabindex', '0');
     });

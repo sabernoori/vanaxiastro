@@ -1036,8 +1036,7 @@ textarea:focus:not(:focus-visible) {
   min-width: 0;
 }
 
-/* First screen uses the preloaded SemiBold face so Ravi-Bold is not
-   requested from inlined CSS (Lighthouse critical-request chain). */
+/* First screen uses preloaded Regular + SemiBold. Bold loads later. */
 .hero_title,
 .section_hero .button {
   font-weight: 600;
@@ -1460,7 +1459,7 @@ textarea:focus:not(:focus-visible) {
     justify-content: flex-start;
     align-items: center;
     background-color: var(--colors--white);
-    opacity: 0.56;
+    opacity: 0.6;
     white-space: nowrap;
   }
 

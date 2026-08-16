@@ -1999,15 +1999,7 @@ textarea.w-input, textarea.w-select {
 
 @font-face {
   font-family: Ravi;
-  src: url("/assets/fonts/6a6a14765b9bfb281b659310_Ravi-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: Ravi;
-  src: url("/assets/fonts/6a6a14762de583d7adeb8649_Ravi-Regular.ttf") format("truetype");
+  src: url("/assets/fonts/Ravi-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -2015,8 +2007,16 @@ textarea.w-input, textarea.w-select {
 
 @font-face {
   font-family: Ravi;
-  src: url("/assets/fonts/6a6a14765b9bfb281b659319_Ravi-SemiBold.ttf") format("truetype");
+  src: url("/assets/fonts/Ravi-SemiBold.woff2") format("woff2");
   font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Ravi;
+  src: url("/assets/fonts/Ravi-Bold.woff2") format("woff2");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -4252,7 +4252,7 @@ a {
 
   .services_tab {
     background-color: var(--colors--white);
-    opacity: .56;
+    opacity: .6;
     white-space: nowrap;
     flex-flow: row;
     justify-content: flex-start;
