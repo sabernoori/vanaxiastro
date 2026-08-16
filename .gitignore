@@ -2,11 +2,26 @@
 node_modules/
 dist/
 .astro/
+.vite/
+*.tsbuildinfo
+
+# Stacki / AVB editor cache
+.avb/
+**/.avb/
 
 # Local scrape / audit tooling (not shipped)
 _source/
 setup-assets.mjs
 .tmp/
+tmp-*.html
+
+# Customer-logo scrape working files (keep the actual logo images)
+public/assets/customer-logos/_html/
+public/assets/customer-logos/_*.py
+public/assets/customer-logos/_*.json
+public/assets/customer-logos/_*
+__pycache__/
+*.pyc
 
 # Vercel CLI link (contains project IDs)
 .vercel
@@ -19,7 +34,12 @@ setup-assets.mjs
 # OS / editor
 .DS_Store
 Thumbs.db
+Desktop.ini
 *.log
+npm-debug.log*
 .vscode/
 .idea/
+.cursor/
 *.local
+*~
+*.orig
