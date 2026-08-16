@@ -2,16 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import navbar from '../partials/navbar.html?raw';
 import main from '../partials/main.html?raw';
-import why from '../partials/why.html?raw';
 import footer from '../partials/footer.html?raw';
-
-const mainHtml = main.replace('<!-- INCLUDE:why -->', why);
 ---
 
 <Layout>
   <div class="page-wrapper">
     <Fragment set:html={navbar} />
-    <Fragment set:html={mainHtml} />
+    <Fragment set:html={main} />
     <Fragment set:html={footer} />
   </div>
 </Layout>
