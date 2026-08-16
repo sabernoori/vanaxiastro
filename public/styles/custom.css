@@ -625,53 +625,59 @@
 }
 /* --- END: Process Steps Sticky Scroll --- */
 
+/* Story hover — all breakpoints (touch keeps :hover until the next tap) */
+.section_story .story_content {
+  overflow: hidden;
+}
+
+.section_story .story_gray-overlay {
+  transition: background-color 0.35s ease;
+  pointer-events: none;
+}
+
+.section_story .story_tag {
+  transition: color 0.35s ease, opacity 0.35s ease;
+}
+
+.section_story .story_logo,
+.section_story .story_logo-black {
+  position: absolute;
+  z-index: 3;
+  transition: filter 0.35s ease, opacity 0.35s ease;
+}
+
+.section_story .story_item:hover .story_gray-overlay,
+.section_story .story_item:focus-visible .story_gray-overlay {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.section_story .story_item:hover .story_tag,
+.section_story .story_item:focus-visible .story_tag {
+  color: #fff;
+  opacity: 1;
+}
+
+.section_story .story_item:hover .story_logo,
+.section_story .story_item:hover .story_logo-black,
+.section_story .story_item:focus-visible .story_logo,
+.section_story .story_item:focus-visible .story_logo-black {
+  filter: brightness(0) invert(1);
+}
+
+.section_story .story_image {
+  z-index: 0;
+  transition: opacity 0.35s ease;
+}
+
+.section_story .story_item:hover .story_image,
+.section_story .story_item:focus-visible .story_image {
+  opacity: 0;
+}
+
 /* --- START: Story Card — Desktop only (≥992) --- */
-/*
-  Nothing in this block applies under 991px — Webflow owns tablet/mobile
-  story grid, components, and children. Desktop pin + hover + featured visuals only.
-*/
 @media screen and (min-width: 992px) {
-  .section_story .story_content {
-    overflow: hidden;
-  }
-
-  .section_story .story_gray-overlay {
-    transition: background-color 0.35s ease;
-    pointer-events: none;
-  }
-
-  .section_story .story_tag {
-    transition: color 0.35s ease, opacity 0.35s ease;
-  }
-
-  .section_story .story_logo,
-  .section_story .story_logo-black {
-    position: absolute;
-    z-index: 3;
-    transition: filter 0.35s ease, opacity 0.35s ease;
-    filter: none;
-  }
-
   .section_story .story_logo-white {
     display: none !important;
-  }
-
-  .section_story .story_item:hover .story_gray-overlay,
-  .section_story .story_item:focus-visible .story_gray-overlay {
-    background-color: rgba(0, 0, 0, 0.75);
-  }
-
-  .section_story .story_item:hover .story_tag,
-  .section_story .story_item:focus-visible .story_tag {
-    color: #fff;
-    opacity: 1;
-  }
-
-  .section_story .story_item:hover .story_logo,
-  .section_story .story_item:hover .story_logo-black,
-  .section_story .story_item:focus-visible .story_logo,
-  .section_story .story_item:focus-visible .story_logo-black {
-    filter: brightness(0) invert(1);
   }
 
   .section_story .story_item.featured:hover .story_heading.featured,
@@ -698,13 +704,6 @@
     object-fit: cover;
   }
 
-  .section_story .story_image {
-    z-index: 0;
-    transition: opacity 0.35s ease;
-  }
-
-  .section_story .story_item:hover .story_image,
-  .section_story .story_item:focus-visible .story_image,
   .section_story .story_item.featured .story_image,
   .section_story .is-story-featured .story_image,
   .section_story .story_featured-slot .story_image {

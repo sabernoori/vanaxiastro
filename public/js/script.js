@@ -1226,9 +1226,11 @@
       }
     };
 
-    card.addEventListener('pointerenter', start);
+    // mouseenter/leave match CSS :hover, including sticky tap-hover on touch.
+    // pointerleave fires on finger-up and would cancel the video immediately.
+    card.addEventListener('mouseenter', start);
     card.addEventListener('focusin', start);
-    card.addEventListener('pointerleave', stop);
+    card.addEventListener('mouseleave', stop);
     card.addEventListener('focusout', function(event) {
       if (!card.contains(event.relatedTarget)) stop();
     });
