@@ -1376,11 +1376,31 @@ textarea:focus:not(:focus-visible) {
     top: auto;
     height: auto;
     max-height: none;
+    aspect-ratio: 1;
   }
 
-  .section_story .story_content > .story_heading {
+  /* Match Webflow tablet: overlay title off, caption under the card. */
+  .section_story .story_content > .story_heading,
+  .section_story .story_heading.featured,
+  .section_story .story_item.featured .story_content > .story_heading,
+  .section_story .is-story-featured .story_content > .story_heading,
+  .section_story .story_featured-slot .story_content > .story_heading {
+    display: none;
+  }
+
+  .section_story .story_item.featured > .story_heading,
+  .section_story .is-story-featured > .story_heading,
+  .section_story .is-story-featured .story_item > .story_heading,
+  .section_story .story_featured-slot > .story_heading,
+  .section_story .story_featured-slot .story_item > .story_heading {
     display: block;
-    position: static;
+  }
+
+  .section_story .story_item.featured .story_image,
+  .section_story .is-story-featured .story_image,
+  .section_story .story_featured-slot .story_image,
+  .section_story [class*="d6f6e90e"] .story_image {
+    opacity: 1;
   }
 
   .navbar.is-services-section {
@@ -1429,15 +1449,15 @@ textarea:focus:not(:focus-visible) {
   .section_story .is-story-featured .story_gray-overlay,
   .section_story .story_featured-slot .story_gray-overlay,
   .section_story [class*="d6f6e90e"] .story_gray-overlay {
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: var(--colors--border);
   }
 
   .section_story .story_item.featured .story_tag,
   .section_story .is-story-featured .story_tag,
   .section_story .story_featured-slot .story_tag,
   .section_story [class*="d6f6e90e"] .story_tag {
-    color: #fff;
-    opacity: 1;
+    color: inherit;
+    opacity: 0.5;
   }
 
   .section_story .story_item.featured .story_logo,
@@ -1448,7 +1468,7 @@ textarea:focus:not(:focus-visible) {
   .section_story .story_featured-slot .story_logo-black,
   .section_story [class*="d6f6e90e"] .story_logo,
   .section_story [class*="d6f6e90e"] .story_logo-black {
-    filter: brightness(0) invert(1);
+    filter: none;
   }
 
   .services_tab,
