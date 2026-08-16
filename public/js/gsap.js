@@ -33,7 +33,7 @@
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.85,
+      wheelMultiplier: 0.5,
       touchMultiplier: 1.35,
       infinite: false
     });
@@ -624,9 +624,15 @@
     const boot = () => {
       initLenisSmoothScroll();
       setTimeout(() => {
-        initWhyImgScaleDown();
-        initWhyCenterFadeIn();
-        initWhyImgParallaxFallback();
+        const useWhyDaylight = !!document.querySelector('.section_why.is-why-daylight');
+        if (useWhyDaylight) {
+          initWhyImgScaleDown();
+          initWhyImgParallaxFallback();
+        } else {
+          initWhyImgScaleDown();
+          initWhyCenterFadeIn();
+          initWhyImgParallaxFallback();
+        }
         initServicesDesktopScroll();
         initProcessStepsScroll();
         ScrollTrigger.refresh();

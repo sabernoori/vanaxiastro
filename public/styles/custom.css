@@ -1206,6 +1206,41 @@ textarea:focus:not(:focus-visible) {
   will-change: opacity;
 }
 
+/* Daylight USP copy — scoped so the original Why GSAP can be restored */
+.section_why.is-why-daylight .why-split-mask {
+  display: block;
+  overflow: hidden;
+  margin-block: -0.04em;
+  padding-block: 0.04em;
+}
+
+.section_why.is-why-daylight .why-split-inner {
+  display: block;
+}
+
+html.w-mod-js .section_why.is-why-daylight .why_img {
+  visibility: visible !important;
+}
+
+@media screen and (min-width: 992px) {
+  html.w-mod-js .section_why.is-why-daylight .why_in-center-content {
+    opacity: 0;
+  }
+
+  .section_why.is-why-daylight .why_in-center {
+    overflow: hidden;
+    clip-path: inset(0%);
+  }
+
+  .section_why.is-why-daylight .why_in-center-fixed {
+    will-change: transform, opacity;
+  }
+
+  .section_why.is-why-daylight .why_in-center-content {
+    will-change: transform, opacity;
+  }
+}
+
 .section_story .story_logo-white {
   display: none !important;
 }
@@ -1601,5 +1636,10 @@ textarea:focus:not(:focus-visible) {
   .footer_cloud1,
   .footer_cloud2 {
     animation: none !important;
+  }
+
+  html.w-mod-js .section_why.is-why-daylight .why_in-center-content,
+  html.w-mod-js .section_why.is-why-daylight .why_in-center-fixed {
+    opacity: 1;
   }
 }

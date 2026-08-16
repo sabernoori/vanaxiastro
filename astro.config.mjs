@@ -49,6 +49,19 @@ function kb(bytes) {
   return `${(bytes / 1024).toFixed(1)} kB`;
 }
 
+const loopbackHosts = ['localhost', '127.0.0.1', '::1', '0.0.0.0'];
+for (const key of ['NO_PROXY', 'no_proxy']) {
+  const current = process.env[key] ?? '';
+  const parts = new Set(
+    current
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean)
+  );
+  for (const host of loopbackHosts) parts.add(host);
+  process.env[key] = [...parts].join(',');
+}
+
 export default defineConfig({
   site: 'https://vanaxi.com',
   output: 'static',
@@ -57,5 +70,17 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'always'
   },
-  integrations: [minifyPublicAssets()]
+  integrations: [minifyPublicAssets()],
+  server: {
+    host: '127.0.0.1'
+  },
+  vite: {
+    server: {
+      host: '127.0.0.1',
+      hmr: {
+        host: '127.0.0.1',
+        protocol: 'ws'
+      }
+    }
+  }
 });
