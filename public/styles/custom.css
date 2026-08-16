@@ -1363,6 +1363,24 @@ textarea:focus:not(:focus-visible) {
   min-width: 0;
 }
 
+/* Kashida fills lines; alignment stays in CSS so pages can override it. */
+[data-kashida] {
+  text-align: justify;
+  text-align-last: right;
+}
+
+[data-kashida-align="center"] {
+  text-align: justify;
+  text-align-last: center;
+}
+
+@media screen and (max-width: 991px) {
+  .why_desc-text-mob.text-small[data-kashida] {
+    display: block;
+    width: 100%;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .why_item-center,
   .services_wrapper,

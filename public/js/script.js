@@ -1010,6 +1010,11 @@
     clearHeightListener(answer);
 
     answer.classList.remove('is-hide');
+    if (window.Kashida && typeof window.Kashida.refresh === 'function') {
+      window.requestAnimationFrame(function () {
+        window.Kashida.refresh();
+      });
+    }
 
     if (immediate) {
       setAnswerHeight(answer, 'auto');
