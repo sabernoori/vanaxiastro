@@ -26,6 +26,10 @@
       return null;
     }
 
+    const WHEEL_DEFAULT = 0.85;
+    const TOUCH_DEFAULT = 1.35;
+    const MOBILE_MQ = window.matchMedia('(max-width: 991px)');
+
     const lenis = new Lenis({
       // Higher duration = slower/smoother settle. Lower wheelMultiplier = less distance per tick.
       duration: 1.9,
@@ -33,12 +37,76 @@
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 0.5,
-      touchMultiplier: 1.35,
+      wheelMultiplier: WHEEL_DEFAULT,
+      touchMultiplier: TOUCH_DEFAULT,
       infinite: false
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
+    // data-scroll-speed="50%" → wheel 0.5 (desktop).
+    // data-scroll-speed-mobile — same speed on mobile, or data-scroll-speed-mobile="70%" for a different one.
+    // Omit data-scroll-speed-mobile to leave mobile at the page default.
+    function parseSpeed(raw) {
+      if (raw == null || raw === '') return null;
+      const n = parseFloat(String(raw).trim());
+      if (!Number.isFinite(n)) return null;
+      return n > 1 ? n / 100 : n;
+    }
+
+    function speedForSection(el, isMobile) {
+      if (isMobile) {
+        if (!el.hasAttribute('data-scroll-speed-mobile')) return null;
+        const mobileRaw = el.getAttribute('data-scroll-speed-mobile');
+        if (mobileRaw === 'false') return null;
+        if (mobileRaw === '' || mobileRaw === 'true') {
+          return parseSpeed(el.getAttribute('data-scroll-speed'));
+        }
+        return parseSpeed(mobileRaw);
+      }
+      return parseSpeed(el.getAttribute('data-scroll-speed'));
+    }
+
+    function applyLenisSpeed(wheel, touch) {
+      lenis.options.wheelMultiplier = wheel;
+      lenis.options.touchMultiplier = touch;
+      // Lenis 1.x copies multipliers onto VirtualScroll at init — options.wheelMultiplier is ignored after that.
+      const vs = lenis.virtualScroll;
+      if (vs && vs.options) {
+        vs.options.wheelMultiplier = wheel;
+        vs.options.touchMultiplier = touch;
+      }
+    }
+
+    function sectionInView(el) {
+      const r = el.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    }
+
+    function syncLenisSpeed() {
+      const isMobile = MOBILE_MQ.matches;
+      let wheel = WHEEL_DEFAULT;
+      let touch = TOUCH_DEFAULT;
+
+      document.querySelectorAll('[data-scroll-speed]').forEach((el) => {
+        if (!sectionInView(el)) return;
+        const speed = speedForSection(el, isMobile);
+        if (speed == null) return;
+        wheel = speed;
+        touch = TOUCH_DEFAULT * speed;
+      });
+
+      applyLenisSpeed(wheel, touch);
+    }
+
+    window.addEventListener('wheel', syncLenisSpeed, { capture: true, passive: true });
+    window.addEventListener('touchstart', syncLenisSpeed, { capture: true, passive: true });
+    if (typeof MOBILE_MQ.addEventListener === 'function') {
+      MOBILE_MQ.addEventListener('change', syncLenisSpeed);
+    }
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
+      syncLenisSpeed();
+    });
+    syncLenisSpeed();
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
