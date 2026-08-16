@@ -1012,7 +1012,7 @@
     answer.classList.remove('is-hide');
     if (window.Kashida && typeof window.Kashida.refresh === 'function') {
       window.requestAnimationFrame(function () {
-        window.Kashida.refresh();
+        window.Kashida.refresh(answer);
       });
     }
 

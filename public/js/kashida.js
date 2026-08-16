@@ -3,15 +3,10 @@
  *
  * Opt-in:  <p data-kashida>…</p>
  * Off:     <html data-kashida="off">  or  Kashida.destroy()
- * Drop-in: load this file; no other dependencies.
  *
- * Goal is even justification: kashida fills the line, not word-spacing.
- * Each word still gets at most one join; tatweels are added in priority
- * order until the line is visually full. Wrap is frozen from live layout.
  * Alignment is CSS/HTML, not this script:
  *   [data-kashida]                 justify, last line start/right
  *   [data-kashida-align="center"]  justify, last line centered
-
  */
 (function (root) {
   'use strict';
@@ -24,10 +19,9 @@
   var EPSILON_EM = 0.06;
   var MIN_LAST_WORDS = 4;
   var NBSP = '\u00A0';
+  var TATWEEL_RE = /\u0640/g;
 
-  var DUAL = new Set(
-    'بتثجحخسشصضطظعغفقکكگلمنهیيئپچ'.split('')
-  );
+  var DUAL = new Set('بتثجحخسشصضطظعغفقکكگلمنهیيئپچ'.split(''));
   var SEEN = new Set('سشصض');
   var BEH = new Set('بتثنپ');
   var RA_YA = new Set('ریيى');
@@ -37,9 +31,14 @@
   var ALEF = new Set('اأإآ');
 
   var observer = null;
+  var io = null;
   var probe = null;
   var bound = [];
   var raf = 0;
+  var resizeTimer = 0;
+  var pending = [];
+  var probeFontKey = '';
+  var cachedTatweelW = 0;
 
   function isOff() {
     return document.documentElement.getAttribute('data-kashida') === 'off';
@@ -69,18 +68,6 @@
     return k < 0;
   }
 
-  /**
-   * Microsoft / IE connection priority. One join per word; equal
-   * priority prefers the later join (toward the end of the word).
-   * 110 after a user tatweel
-   * 100 after initial/medial Seen/Sad
-   *  90 before final teh marbuta / heh / dal
-   *  80 before final alef / tah / lam / kaf / gaf
-   *  70 before medial beh-shape followed by reh / yeh / alef maqsura
-   *  60 before final waw / ain / qaf / feh
-   *  50 before final of any other connecting letter
-   *  20 last resort: any other valid medial join
-   */
   function bestJoin(word) {
     var existing = word.lastIndexOf(TATWEEL);
     if (existing !== -1 && existing < word.length - 1) {
@@ -190,21 +177,6 @@
     });
   }
 
-  function copyFont(fromEl, toEl) {
-    var cs = getComputedStyle(fromEl);
-    toEl.style.font = cs.font;
-    toEl.style.fontSize = cs.fontSize;
-    toEl.style.fontFamily = cs.fontFamily;
-    toEl.style.fontWeight = cs.fontWeight;
-    toEl.style.fontStyle = cs.fontStyle;
-    toEl.style.letterSpacing = cs.letterSpacing;
-    toEl.style.wordSpacing = cs.wordSpacing;
-    toEl.style.direction = cs.direction;
-    toEl.style.fontFeatureSettings = cs.fontFeatureSettings;
-    toEl.style.fontKerning = cs.fontKerning;
-    toEl.style.textTransform = cs.textTransform;
-  }
-
   function ensureProbe() {
     if (probe && probe.isConnected) return probe;
     probe = document.createElement('span');
@@ -215,29 +187,71 @@
     return probe;
   }
 
-  function makeMeasure(el) {
+  function makeMeasure(cs) {
     var p = ensureProbe();
-    copyFont(el, p);
+    var key =
+      cs.font +
+      '|' +
+      cs.letterSpacing +
+      '|' +
+      cs.wordSpacing +
+      '|' +
+      cs.direction +
+      '|' +
+      cs.fontFeatureSettings;
+    if (key !== probeFontKey) {
+      p.style.font = cs.font;
+      p.style.fontSize = cs.fontSize;
+      p.style.fontFamily = cs.fontFamily;
+      p.style.fontWeight = cs.fontWeight;
+      p.style.fontStyle = cs.fontStyle;
+      p.style.letterSpacing = cs.letterSpacing;
+      p.style.wordSpacing = cs.wordSpacing;
+      p.style.direction = cs.direction;
+      p.style.fontFeatureSettings = cs.fontFeatureSettings;
+      p.style.fontKerning = cs.fontKerning;
+      p.style.textTransform = cs.textTransform;
+      probeFontKey = key;
+      cachedTatweelW = 0;
+    }
     return function measure(str) {
       p.textContent = str || '';
       return p.getBoundingClientRect().width;
     };
   }
 
-  function innerWidth(el) {
-    var cs = getComputedStyle(el);
+  function tatweelWidth(measure) {
+    if (cachedTatweelW > 0) return cachedTatweelW;
+    var a = measure('سا');
+    var b = measure('س' + TATWEEL + 'ا');
+    var w = b - a;
+    cachedTatweelW = w > 0.5 ? w : 4;
+    return cachedTatweelW;
+  }
+
+  function innerWidthFrom(el, cs) {
     var pl = parseFloat(cs.paddingLeft) || 0;
     var pr = parseFloat(cs.paddingRight) || 0;
     return el.clientWidth - pl - pr;
   }
 
-  function lineThreshold(el) {
-    var cs = getComputedStyle(el);
+  function lineThresholdFrom(cs) {
     var lh = parseFloat(cs.lineHeight);
     if (!isFinite(lh) || cs.lineHeight === 'normal') {
       lh = (parseFloat(cs.fontSize) || 16) * 1.2;
     }
     return Math.max(2, lh * 0.35);
+  }
+
+  function isUnmeasurable(el, cs) {
+    if (el.clientWidth < 32) return true;
+    if (cs.display === 'none' || cs.visibility === 'hidden') return true;
+    if (typeof el.checkVisibility === 'function') {
+      try {
+        if (!el.checkVisibility({ checkOpacity: false, checkVisibilityCSS: true })) return true;
+      } catch (err) {}
+    }
+    return false;
   }
 
   function liveLineCount(el) {
@@ -247,32 +261,32 @@
     return range.getClientRects().length || 1;
   }
 
-  function splitLiveLines(el) {
+  function splitLiveLines(el, threshold) {
     var node = el.firstChild;
     if (!node || node.nodeType !== 3) {
       var fallback = tidyLine(el.textContent || '');
       return fallback ? [fallback] : [];
     }
     var text = node.data;
-    var len = text.length;
-    if (!len) return [];
+    if (!text.length) return [];
 
-    var threshold = lineThreshold(el);
     var range = document.createRange();
     var lines = [];
     var start = 0;
     var lastTop = null;
-    var i;
-    for (i = 0; i < len; i++) {
-      range.setStart(node, i);
-      range.setEnd(node, i + 1);
+    var re = /\S+/g;
+    var m;
+    while ((m = re.exec(text))) {
+      var end = m.index + m[0].length;
+      range.setStart(node, end - 1);
+      range.setEnd(node, end);
       var rects = range.getClientRects();
       if (!rects.length) continue;
       var top = rects[0].top;
       if (lastTop !== null && top - lastTop > threshold) {
-        var chunk = tidyLine(text.slice(start, i));
+        var chunk = tidyLine(text.slice(start, m.index));
         if (chunk) lines.push(chunk);
-        start = i;
+        start = m.index;
       }
       lastTop = top;
     }
@@ -281,15 +295,15 @@
     return lines;
   }
 
-  function fillLine(line, width, measure, epsilon) {
-    var limit = width - epsilon;
+  function fillLine(line, limit, measure, unit) {
     var words = line.split(/(\s+)/);
 
-    function ink() {
-      return measure(words.join(''));
+    function joined() {
+      return words.join('');
     }
 
-    if (ink() >= limit) return line;
+    var now = measure(joined());
+    if (now >= limit || unit < 0.5) return line;
 
     var slots = [];
     var i;
@@ -305,66 +319,85 @@
       return b.i - a.i;
     });
 
+    var maxAdds = Math.min(
+      Math.floor((limit - now) / unit),
+      slots.length * MAX_PER_JOIN,
+      24
+    );
+    if (maxAdds <= 0) return line;
+
     var cursor = 0;
+    var added = 0;
     var stalled = 0;
-    var guard = 0;
-    while (ink() < limit && stalled < slots.length && guard++ < 80) {
+    while (added < maxAdds && stalled < slots.length) {
       var slot = slots[cursor];
       cursor = (cursor + 1) % slots.length;
       if (slot.count >= MAX_PER_JOIN) {
         stalled++;
         continue;
       }
-      var trialWord = insertTatweel(words[slot.i], slot.index);
-      var trial = words.slice();
-      trial[slot.i] = trialWord;
-      if (measure(trial.join('')) > limit) {
-        stalled++;
-        continue;
-      }
-      words[slot.i] = trialWord;
+      words[slot.i] = insertTatweel(words[slot.i], slot.index);
       slot.index += 1;
       slot.count += 1;
+      added++;
       stalled = 0;
     }
-    return words.join('');
+
+    var filled = joined();
+    var w = measure(filled);
+    var guard = 0;
+    while (w > limit && filled.indexOf(TATWEEL) !== -1 && guard++ < 16) {
+      filled = stripLastTatweel(filled);
+      w = measure(filled);
+    }
+    return filled;
+  }
+
+  function restoreSrc(el, src) {
+    if (el.textContent !== src) el.textContent = src;
+    el._kashidaW = 0;
   }
 
   function applyElement(el) {
     if (isOff()) return;
+    if (el._kashidaInView === false) return;
+
     var src = el.getAttribute(SRC_ATTR);
     if (!src) {
-      src = (el.textContent || '').replace(new RegExp(TATWEEL, 'g'), '').replace(/\s+/g, ' ').trim();
+      src = (el.textContent || '').replace(TATWEEL_RE, '').replace(/\s+/g, ' ').trim();
       el.setAttribute(SRC_ATTR, src);
     }
     if (!src) return;
 
-    if (el.clientWidth < 32 || getComputedStyle(el).display === 'none') {
-      el.textContent = src;
+    var cs = getComputedStyle(el);
+    if (isUnmeasurable(el, cs)) {
+      restoreSrc(el, src);
       return;
     }
 
-    var width = innerWidth(el);
+    var width = innerWidthFrom(el, cs);
     if (width < 32) {
-      el.textContent = src;
+      restoreSrc(el, src);
       return;
     }
+    if (el._kashidaW === width && el.getAttribute('data-kashida-ready') === '1') return;
 
     el.textContent = src;
 
-    var lines = rebalanceOrphans(splitLiveLines(el), MIN_LAST_WORDS);
+    var lines = rebalanceOrphans(splitLiveLines(el, lineThresholdFrom(cs)), MIN_LAST_WORDS);
     if (lines.length < 2) {
-      el.textContent = src;
+      restoreSrc(el, src);
+      el._kashidaW = width;
+      el.setAttribute('data-kashida-ready', '1');
       return;
     }
 
-    var working = lines.join(' ').replace(new RegExp(NBSP, 'g'), ' ');
-    working = glueTail(working, MIN_LAST_WORDS);
-
+    var working = glueTail(lines.join(' ').replace(/\u00A0/g, ' '), MIN_LAST_WORDS);
     var origCount = lines.length;
-    var measure = makeMeasure(el);
-    var em = parseFloat(getComputedStyle(el).fontSize) || 16;
-    var epsilon = Math.max(2, em * EPSILON_EM);
+    var measure = makeMeasure(cs);
+    var em = parseFloat(cs.fontSize) || 16;
+    var limit = width - Math.max(2, em * EPSILON_EM);
+    var unit = tatweelWidth(measure);
 
     var out = [];
     var i;
@@ -372,11 +405,7 @@
       if (i === lines.length - 1) {
         out.push(glueTail(lines[i], MIN_LAST_WORDS));
       } else {
-        var filled = fillLine(lines[i], width, measure, epsilon);
-        while (measure(filled) > width - 1 && filled.indexOf(TATWEEL) !== -1) {
-          filled = stripLastTatweel(filled);
-        }
-        out.push(filled);
+        out.push(fillLine(lines[i], limit, measure, unit));
       }
     }
 
@@ -384,7 +413,7 @@
     el.textContent = text;
 
     var guard = 0;
-    while (liveLineCount(el) > origCount && text.indexOf(TATWEEL) !== -1 && guard++ < 24) {
+    while (liveLineCount(el) > origCount && text.indexOf(TATWEEL) !== -1 && guard++ < 16) {
       var cut = -1;
       for (i = 0; i < out.length - 1; i++) {
         if (out[i].indexOf(TATWEEL) !== -1) {
@@ -401,6 +430,9 @@
     if (liveLineCount(el) > origCount) {
       el.textContent = working;
     }
+
+    el._kashidaW = width;
+    el.setAttribute('data-kashida-ready', '1');
   }
 
   function onCopy(event) {
@@ -411,12 +443,55 @@
     event.preventDefault();
   }
 
-  function schedule() {
-    if (raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(function () {
-      raf = 0;
-      refresh();
-    });
+  function queue(el) {
+    if (!el || el._kashidaQueued) return;
+    el._kashidaQueued = 1;
+    pending.push(el);
+    if (!raf) {
+      raf = requestAnimationFrame(flush);
+    }
+  }
+
+  function flush() {
+    raf = 0;
+    var list = pending;
+    pending = [];
+    var i;
+    for (i = 0; i < list.length; i++) {
+      list[i]._kashidaQueued = 0;
+      applyElement(list[i]);
+    }
+  }
+
+  function onResize(entries) {
+    var i;
+    for (i = 0; i < entries.length; i++) {
+      var el = entries[i].target;
+      el._kashidaW = 0;
+      el.removeAttribute('data-kashida-ready');
+      queue(el);
+    }
+  }
+
+  function onWindowResize() {
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(function () {
+      var i;
+      for (i = 0; i < bound.length; i++) {
+        bound[i]._kashidaW = 0;
+        bound[i].removeAttribute('data-kashida-ready');
+        if (bound[i]._kashidaInView !== false) queue(bound[i]);
+      }
+    }, 140);
+  }
+
+  function onIntersect(entries) {
+    var i;
+    for (i = 0; i < entries.length; i++) {
+      var el = entries[i].target;
+      el._kashidaInView = entries[i].isIntersecting;
+      if (entries[i].isIntersecting) queue(el);
+    }
   }
 
   function bind(el) {
@@ -425,21 +500,40 @@
     if (!el.getAttribute(SRC_ATTR)) {
       el.setAttribute(
         SRC_ATTR,
-        (el.textContent || '').replace(new RegExp(TATWEEL, 'g'), '').replace(/\s+/g, ' ').trim()
+        (el.textContent || '').replace(TATWEEL_RE, '').replace(/\s+/g, ' ').trim()
       );
     }
     el.addEventListener('copy', onCopy);
     bound.push(el);
     if (observer) observer.observe(el);
+    if (io) io.observe(el);
+    else queue(el);
   }
 
-  function refresh() {
+  function targetsFrom(scope) {
+    if (!scope) return bound;
+    var out = [];
+    var i;
+    for (i = 0; i < bound.length; i++) {
+      if (scope === bound[i] || (scope.contains && scope.contains(bound[i]))) {
+        out.push(bound[i]);
+      }
+    }
+    return out;
+  }
+
+  function refresh(scope) {
     if (isOff()) {
       destroy({ keepOff: true });
       return;
     }
+    var list = targetsFrom(scope);
     var i;
-    for (i = 0; i < bound.length; i++) applyElement(bound[i]);
+    for (i = 0; i < list.length; i++) {
+      list[i]._kashidaW = 0;
+      list[i].removeAttribute('data-kashida-ready');
+      queue(list[i]);
+    }
   }
 
   function init(options) {
@@ -447,27 +541,39 @@
     if (isOff()) return;
     var selector = options.selector || SELECTOR;
     var nodes = document.querySelectorAll(selector);
-    if (!observer) {
-      observer = new ResizeObserver(schedule);
+    if (!observer) observer = new ResizeObserver(onResize);
+    if (!io && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver(onIntersect, {
+        root: null,
+        rootMargin: '40% 0px',
+        threshold: 0.01
+      });
     }
     var i;
     for (i = 0; i < nodes.length; i++) bind(nodes[i]);
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(schedule);
+      document.fonts.ready.then(function () {
+        refresh();
+      });
     }
-    window.addEventListener('resize', schedule);
-    refresh();
+    window.addEventListener('resize', onWindowResize, { passive: true });
   }
 
   function destroy(opts) {
     opts = opts || {};
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
+    pending = [];
+    window.clearTimeout(resizeTimer);
     if (observer) {
       observer.disconnect();
       observer = null;
     }
-    window.removeEventListener('resize', schedule);
+    if (io) {
+      io.disconnect();
+      io = null;
+    }
+    window.removeEventListener('resize', onWindowResize);
     var i;
     for (i = 0; i < bound.length; i++) {
       var el = bound[i];
@@ -477,8 +583,14 @@
       el.style.removeProperty('text-align-last');
       el.removeEventListener('copy', onCopy);
       el.removeAttribute('data-kashida-bound');
+      el.removeAttribute('data-kashida-ready');
+      el._kashidaQueued = 0;
+      el._kashidaW = 0;
+      el._kashidaInView = undefined;
     }
     bound = [];
+    probeFontKey = '';
+    cachedTatweelW = 0;
     if (probe && probe.parentNode) probe.parentNode.removeChild(probe);
     probe = null;
     if (!opts.keepOff) {
@@ -486,8 +598,7 @@
     }
   }
 
-  var api = { init: init, refresh: refresh, destroy: destroy };
-  root.Kashida = api;
+  root.Kashida = { init: init, refresh: refresh, destroy: destroy };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {

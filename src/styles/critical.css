@@ -52,18 +52,10 @@ body {
   font-display: swap;
 }
 
-@font-face {
-  font-family: Ravi;
-  src: url("/assets/fonts/6a6a14765b9bfb281b659310_Ravi-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 h1 {
   margin: 0;
   font-size: 38px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.7;
 }
 
@@ -81,6 +73,9 @@ a {
   max-width: 100%;
   display: inline-block;
 }
+
+
+/*comment */ 
 
 .w-button {
   color: #fff;
@@ -318,7 +313,7 @@ a {
   height: 3.5rem;
   padding: 1rem 1.25rem;
   font-size: clamp(0.875rem, 0.813rem + 0.25vw, 1rem);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.5;
   display: flex;
 }

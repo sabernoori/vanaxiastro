@@ -1363,6 +1363,13 @@ textarea:focus:not(:focus-visible) {
   min-width: 0;
 }
 
+/* First screen uses the preloaded SemiBold face so Ravi-Bold is not
+   requested from inlined CSS (Lighthouse critical-request chain). */
+.hero_title,
+.section_hero .button {
+  font-weight: 600;
+}
+
 /* Kashida fills lines; alignment stays in CSS so pages can override it. */
 [data-kashida] {
   text-align: justify;
