@@ -1042,10 +1042,10 @@
   }
 
   function setExpandedState(item, expanded) {
-    const trigger = item.querySelector('.faq_question-group') || item;
+    const question = item.querySelector('.faq_question-group');
     const value = expanded ? 'true' : 'false';
     item.setAttribute('aria-expanded', value);
-    trigger.setAttribute('aria-expanded', value);
+    if (question) question.setAttribute('aria-expanded', value);
   }
 
   function closeItem(item, immediate) {
@@ -1078,40 +1078,41 @@
     item.dataset.faqBound = 'true';
 
     const parts = getParts(item);
-    const trigger = item.querySelector('.faq_question-group') || item;
+    const question = item.querySelector('.faq_question-group');
     const answerId = 'faq-answer-' + (index + 1);
 
     item.classList.remove('is-active');
-    trigger.setAttribute('role', 'button');
-    trigger.setAttribute('tabindex', '0');
-    trigger.setAttribute('aria-expanded', 'false');
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
     item.setAttribute('aria-expanded', 'false');
+    if (question) {
+      question.removeAttribute('role');
+      question.removeAttribute('tabindex');
+      question.removeAttribute('aria-expanded');
+      if (!question.id) question.id = 'faq-question-' + (index + 1);
+    }
 
     if (parts.icon) parts.icon.classList.remove('is-open');
     if (parts.answer) {
       parts.answer.id = answerId;
       parts.answer.setAttribute('role', 'region');
-      parts.answer.setAttribute('aria-labelledby', trigger.id || '');
-      trigger.setAttribute('aria-controls', answerId);
+      if (question) {
+        parts.answer.setAttribute('aria-labelledby', question.id);
+        item.setAttribute('aria-controls', answerId);
+      }
       clearHeightListener(parts.answer);
       parts.answer.classList.add('is-hide');
       setAnswerHeight(parts.answer, '0px');
     }
 
-    if (!trigger.id) trigger.id = 'faq-question-' + (index + 1);
-    if (parts.answer) parts.answer.setAttribute('aria-labelledby', trigger.id);
-
     const onActivate = (event) => {
       if (event.target.closest('a, button, input, textarea, select')) return;
       event.preventDefault();
       toggleItem(item, list);
-      const expanded = item.classList.contains('is-active') ? 'true' : 'false';
-      trigger.setAttribute('aria-expanded', expanded);
-      item.setAttribute('aria-expanded', expanded);
     };
 
-    trigger.addEventListener('click', onActivate);
-    trigger.addEventListener('keydown', (event) => {
+    item.addEventListener('click', onActivate);
+    item.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return;
       onActivate(event);
     });
@@ -1119,9 +1120,7 @@
 
   function initFaqList(list) {
     const items = Array.from(list.querySelectorAll('.faq_item'));
-    list.setAttribute('role', 'list');
     items.forEach((item, index) => {
-      item.setAttribute('role', 'listitem');
       bindItem(item, list, index);
     });
 
@@ -1129,9 +1128,6 @@
     if (items[0] && !list.dataset.faqOpenedDefault) {
       list.dataset.faqOpenedDefault = 'true';
       openItem(items[0], list, true);
-      const trigger = items[0].querySelector('.faq_question-group') || items[0];
-      trigger.setAttribute('aria-expanded', 'true');
-      items[0].setAttribute('aria-expanded', 'true');
     }
   }
 
