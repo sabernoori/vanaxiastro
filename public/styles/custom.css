@@ -1229,7 +1229,8 @@ textarea:focus:not(:focus-visible) {
 }
 
 .footer .text-small.opacity-50,
-.process_stat .text-small.opacity-50 {
+.process_stat .text-small.opacity-50,
+.faq_heading-wrapper .opacity-50 {
   opacity: 0.56;
 }
 
