@@ -1618,9 +1618,6 @@
   }
 
   function enhanceStoryCards() {
-    document.querySelectorAll('.story_heading.featured').forEach((heading) => {
-      heading.setAttribute('aria-hidden', 'true');
-    });
     document.querySelectorAll('.story_video video, .story_video-url').forEach((el) => {
       el.setAttribute('aria-hidden', 'true');
     });

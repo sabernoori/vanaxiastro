@@ -4335,6 +4335,7 @@ a {
     grid-column-gap: 2.5rem;
     grid-row-gap: 2.5rem;
     flex-flow: column;
+    align-items: center;
   }
 
   .faq_heading-wrapper {
