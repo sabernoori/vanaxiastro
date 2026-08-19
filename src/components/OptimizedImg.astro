@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+const catalog = import.meta.glob<{ default: ImageMetadata }>(
+  '../../public/assets/images/**/*.{avif,png,jpg,jpeg,webp,gif}'
+);
+
+interface Props {
+  src: string;
+  alt?: string;
+  class?: string;
+  width?: number | string;
+  height?: number | string;
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'auto' | 'sync';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+  srcset?: string;
+}
+
+const {
+  src,
+  alt = '',
+  class: className,
+  width,
+  height,
+  loading,
+  decoding = 'async',
+  fetchpriority,
+  sizes,
+  srcset: _srcset
+} = Astro.props;
+
+function findKey(path: string): string | undefined {
+  const file = path.replace(/\\/g, '/').split('/').pop();
+  if (!file) return;
+  const keys = Object.keys(catalog).filter((key) =>
+    key.replace(/\\/g, '/').endsWith('/' + file)
+  );
+  if (keys.length === 1) return keys[0];
+  return keys.find((key) =>
+    key.replace(/\\/g, '/').includes(path.replace(/^\//, ''))
+  );
+}
+
+const isSvg = /\.svg(?:$|\?)/i.test(src);
+const key = isSvg ? undefined : findKey(src);
+const loaded = key ? await catalog[key]() : undefined;
+const meta = loaded && typeof loaded === 'object' && 'default' in loaded
+  ? loaded.default
+  : loaded && typeof loaded === 'object' && 'src' in loaded
+    ? (loaded as ImageMetadata)
+    : undefined;
+
+const w = width == null || width === '' ? undefined : Number(width);
+const h = height == null || height === '' ? undefined : Number(height);
+---
+
+{
+  meta ? (
+    <Image
+      src={meta}
+      alt={alt}
+      class={className}
+      width={Number.isFinite(w) ? w : undefined}
+      height={Number.isFinite(h) ? h : undefined}
+      inferSize={w == null || h == null}
+      loading={loading}
+      decoding={decoding}
+      fetchpriority={fetchpriority}
+      sizes={sizes}
+      layout="none"
+    />
+  ) : (
+    <img
+      src={src}
+      alt={alt}
+      class={className}
+      width={Number.isFinite(w) ? w : undefined}
+      height={Number.isFinite(h) ? h : undefined}
+      loading={loading}
+      decoding={decoding}
+      fetchpriority={fetchpriority}
+      sizes={sizes}
+    />
+  )
+}

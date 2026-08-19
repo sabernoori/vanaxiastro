@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import navbar from '../partials/navbar.html?raw';
-import main from '../partials/main.html?raw';
-import footer from '../partials/footer.html?raw';
+import Navbar from '../partials/Navbar.astro';
+import Main from '../partials/Main.astro';
+import Footer from '../partials/Footer.astro';
 ---
 
 <Layout>
   <div class="page-wrapper">
-    <Fragment set:html={navbar} />
-    <Fragment set:html={main} />
-    <Fragment set:html={footer} />
+    <Navbar />
+    <Main />
+    <Footer />
   </div>
 </Layout>

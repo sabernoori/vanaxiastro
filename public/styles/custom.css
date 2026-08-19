@@ -680,9 +680,14 @@ html.lenis body {
   position: relative;
   isolation: isolate;
   z-index: 0;
+  opacity: 0.75;
   transition:
     transform 0.3s var(--ease-in-out-expo),
     opacity 0.3s var(--ease-in-out-expo);
+}
+
+.footer_link.footer_highlight {
+  opacity: 1;
 }
 
 .footer_link::before {
@@ -884,6 +889,18 @@ html.lenis body {
   outline-offset: 2px;
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 :focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
@@ -950,8 +967,28 @@ textarea:focus:not(:focus-visible) {
 
 .footer .text-small.opacity-50,
 .process_stat .text-small.opacity-50,
-.faq_heading-wrapper .opacity-50 {
-  opacity: 0.56;
+.faq_heading-wrapper .opacity-50,
+.text-small.opacity-50,
+.text-small.opacity-60 {
+  opacity: 0.72;
+}
+
+.footer_copyright {
+  opacity: 0.75;
+}
+
+.nav_services-desc,
+.nav_services-desc.opacity-50,
+.nav_services-desc.opacity-60 {
+  opacity: 0.72;
+}
+
+.story_tag {
+  opacity: 0.72;
+}
+
+.nav_account-desk {
+  position: relative;
 }
 
 .story_item,
@@ -996,6 +1033,7 @@ textarea:focus:not(:focus-visible) {
   direction: rtl;
   color: var(--colors--white);
   text-decoration: none;
+  cursor: default;
 }
 
 .footer_designer-wrapper {
@@ -1153,7 +1191,7 @@ textarea:focus:not(:focus-visible) {
   direction: rtl;
   opacity: 1;
   overflow: hidden;
-  max-height: 60rem;
+  max-height: 80rem;
   transition:
     max-height 0.45s var(--ease-in-out-quint),
     opacity 0.35s ease;
@@ -1167,6 +1205,12 @@ textarea:focus:not(:focus-visible) {
   max-height: 0 !important;
   opacity: 0;
   pointer-events: none;
+}
+
+.services_item-content-holder > .button {
+  align-self: flex-start;
+  flex: none;
+  width: auto;
 }
 
 /*
@@ -1604,7 +1648,7 @@ html.w-mod-js .section_why.is-why-daylight .why_img {
   .section_story .story_featured-slot .story_tag,
   .section_story [class*="d6f6e90e"] .story_tag {
     color: inherit;
-    opacity: 0.5;
+    opacity: 0.72;
   }
 
   .section_story .story_item.featured .story_logo,

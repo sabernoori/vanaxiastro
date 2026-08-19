@@ -67,6 +67,9 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
   compressHTML: true,
+  image: {
+    layout: 'none'
+  },
   build: {
     inlineStylesheets: 'always'
   },

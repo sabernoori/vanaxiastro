@@ -8,6 +8,13 @@
       "alternateName": ["Vanaxi", "ونکسی حمل و نقل سازمانی"],
       "legalName": "ونکسی",
       "url": "https://vanaxi.com/",
+      "sameAs": [
+        "https://www.instagram.com/vanaxi",
+        "https://www.linkedin.com/company/vanaxi",
+        "https://t.me/vanaxi",
+        "https://x.com/vanaxi",
+        "https://www.aparat.com/vanaxi"
+      ],
       "logo": {
         "@type": "ImageObject",
         "url": "https://vanaxi.com/assets/images/6a6a44df0f27820ac881fc49_logo.svg"

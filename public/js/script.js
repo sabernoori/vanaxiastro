@@ -852,6 +852,7 @@
 
   function onItemClick(event) {
     if (!state.isDesktop) return;
+    if (event.target.closest('a, button')) return;
 
     const item = event.currentTarget;
     const index = state.items.findIndex((entry) => entry.el === item);
@@ -1191,7 +1192,6 @@
     video.setAttribute('playsinline', '');
     video.setAttribute('preload', 'none');
     video.setAttribute('aria-hidden', 'true');
-    video.setAttribute('tabindex', '-1');
     video.setAttribute('data-wf-ignore', 'true');
     video.removeAttribute('autoplay');
     video.removeAttribute('id');
@@ -1622,9 +1622,13 @@
       el.setAttribute('aria-hidden', 'true');
     });
     document.querySelectorAll('.section_story .story_item').forEach((card) => {
-      const link = card.matches('a[href]') ? card : card.querySelector('a[href]');
-      if (link) return;
-      if (!card.hasAttribute('tabindex')) card.setAttribute('tabindex', '0');
+      if (!card.getAttribute('aria-label')) {
+        const title =
+          card.querySelector('.story_heading:not(.featured)') ||
+          card.querySelector('.story_heading');
+        const label = (title && title.textContent || '').replace(/\s+/g, ' ').trim();
+        if (label) card.setAttribute('aria-label', label);
+      }
     });
   }
 
