@@ -108,6 +108,20 @@ const ogDescription =
     <style is:inline>
       html.w-mod-js:not(.w-mod-ix3) :is(.why_img) { visibility: hidden !important; }
       html { scroll-behavior: auto; }
+      html.w-mod-js:not(.services-cover-ready) .section_services.is-services-cover .heading-section-scale {
+        transform: scale(3);
+        transform-origin: 50% 50%;
+      }
+      html.w-mod-js:not(.services-cover-ready) .section_services.is-services-cover .services_scale {
+        transform: scale(0.8);
+        transform-origin: 50% 50%;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html.w-mod-js:not(.services-cover-ready) .section_services.is-services-cover .heading-section-scale,
+        html.w-mod-js:not(.services-cover-ready) .section_services.is-services-cover .services_scale {
+          transform: none;
+        }
+      }
     </style>
     <script is:inline>
       !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);

@@ -285,6 +285,104 @@
   // ==========================================
 
   // ==========================================
+  // START: Services heading scale + Daylight card cover
+  // Heading 3 → 1 as the section comes in, then the card
+  // scales 0.8 → 1 (godaylight first-article recipe) and covers it.
+  // ==========================================
+  function initServicesIntroCover() {
+    const section = document.querySelector('#services.section_services.is-services-cover');
+    if (!section) return;
+
+    const heading = section.querySelector(':scope > .heading-section');
+    const headingScale = heading && heading.querySelector('.heading-section-scale');
+    if (!heading || !headingScale) return;
+
+    const CARD_GRAY = '#e6eaf3';
+    const CARD_WHITE = '#ffffff';
+    const mm = gsap.matchMedia();
+
+    function markReady() {
+      document.documentElement.classList.add('services-cover-ready');
+    }
+
+    function setupCover(shell, stage) {
+      if (!shell || !stage) {
+        gsap.set(headingScale, { scale: 1, clearProps: 'transform' });
+        markReady();
+        return;
+      }
+
+      if (REDUCE_MOTION) {
+        gsap.set(headingScale, { scale: 1, clearProps: 'transform' });
+        gsap.set(stage, { scale: 1, backgroundColor: CARD_WHITE, clearProps: 'transform' });
+        markReady();
+        return;
+      }
+
+      gsap.set(headingScale, { scale: 3, transformOrigin: '50% 50%', force3D: true });
+      gsap.set(stage, {
+        scale: 0.8,
+        transformOrigin: '50% 50%',
+        backgroundColor: CARD_GRAY,
+        force3D: true
+      });
+      markReady();
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: heading,
+          start: 'top 85%',
+          endTrigger: shell,
+          end: 'top 8%',
+          scrub: true,
+          invalidateOnRefresh: true
+        }
+      });
+
+      tl.fromTo(headingScale, { scale: 3 }, { scale: 1, duration: 0.55 }, 0);
+      tl.fromTo(
+        stage,
+        { scale: 0.8, yPercent: 18 },
+        { scale: 1, yPercent: 0, duration: 1 },
+        0
+      );
+      tl.fromTo(
+        stage,
+        { backgroundColor: CARD_GRAY },
+        { backgroundColor: CARD_WHITE, duration: 0.7 },
+        0.3
+      );
+
+      return () => {
+        if (tl.scrollTrigger) tl.scrollTrigger.kill();
+        tl.kill();
+        gsap.set(headingScale, { clearProps: 'transform' });
+        gsap.set(stage, { clearProps: 'transform,backgroundColor' });
+      };
+    }
+
+    mm.add('(min-width: 992px)', () =>
+      setupCover(
+        section.querySelector('.services_box-desktop .services_cover-shell'),
+        section.querySelector('.services_box-desktop .services_scale')
+      )
+    );
+
+    mm.add('(max-width: 991px)', () =>
+      setupCover(
+        section.querySelector('.services_cover-shell.is-mobile'),
+        section.querySelector('.services_cover-shell.is-mobile .services_scale')
+      )
+    );
+
+    window.__servicesIntroMm = mm;
+  }
+  // ==========================================
+  // END: Services heading scale + Daylight card cover
+  // ==========================================
+
+  // ==========================================
   // START: Why Image First-Load Scale Down
   // ==========================================
   function initWhyImgScaleDown() {
@@ -702,6 +800,7 @@
           initWhyImgParallaxFallback();
         }
         initServicesDesktopScroll();
+        initServicesIntroCover();
         initProcessStepsScroll();
         ScrollTrigger.refresh();
       }, 100);
@@ -718,6 +817,7 @@
 
   window.GSAPAnimations = {
     refreshServicesDesktop: initServicesDesktopScroll,
+    refreshServicesIntro: initServicesIntroCover,
     refreshWhyImgScale: initWhyImgScaleDown,
     refreshWhyCenterFade: initWhyCenterFadeIn,
     refreshWhyParallax: initWhyImgParallaxFallback,
