@@ -1064,6 +1064,41 @@ textarea:focus:not(:focus-visible) {
   opacity: .7;
 }
 
+.logos_item[data-logo-reel] {
+  overflow: hidden;
+}
+
+.logos_reel-window {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  perspective: 160px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+}
+
+.logos_reel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+
+.logos_reel-cell {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+.logos_reel-cell .image {
+  max-width: 90%;
+  max-height: 2.5rem;
+}
+
 
 
 /* Inactive service titles: 24px bold needs 3:1 (was 2.03 at 0.3) */
