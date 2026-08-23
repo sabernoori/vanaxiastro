@@ -37,6 +37,10 @@
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
+      // Off by default: Lenis 1.x then uses native touch and ignores touchMultiplier.
+      // Turned on in syncLenisSpeed while a mobile speed section is in view.
+      syncTouch: false,
+      syncTouchLerp: 0.12,
       wheelMultiplier: WHEEL_DEFAULT,
       touchMultiplier: TOUCH_DEFAULT,
       infinite: false
@@ -65,10 +69,11 @@
       return parseSpeed(el.getAttribute('data-scroll-speed'));
     }
 
-    function applyLenisSpeed(wheel, touch) {
+    function applyLenisSpeed(wheel, touch, syncTouch) {
       lenis.options.wheelMultiplier = wheel;
       lenis.options.touchMultiplier = touch;
-      // Lenis 1.x copies multipliers onto VirtualScroll at init — options.wheelMultiplier is ignored after that.
+      lenis.options.syncTouch = !!syncTouch;
+      // Lenis 1.x copies multipliers onto VirtualScroll at init — options.*Multiplier is ignored after that.
       const vs = lenis.virtualScroll;
       if (vs && vs.options) {
         vs.options.wheelMultiplier = wheel;
@@ -85,20 +90,24 @@
       const isMobile = MOBILE_MQ.matches;
       let wheel = WHEEL_DEFAULT;
       let touch = TOUCH_DEFAULT;
+      let syncTouch = false;
 
       document.querySelectorAll('[data-scroll-speed]').forEach((el) => {
         if (!sectionInView(el)) return;
         const speed = speedForSection(el, isMobile);
         if (speed == null) return;
         wheel = speed;
+        // Keep the mobile default (1.35) as the 100% baseline, then scale it.
         touch = TOUCH_DEFAULT * speed;
+        if (isMobile) syncTouch = true;
       });
 
-      applyLenisSpeed(wheel, touch);
+      applyLenisSpeed(wheel, touch, syncTouch);
     }
 
     window.addEventListener('wheel', syncLenisSpeed, { capture: true, passive: true });
     window.addEventListener('touchstart', syncLenisSpeed, { capture: true, passive: true });
+    window.addEventListener('touchmove', syncLenisSpeed, { capture: true, passive: true });
     if (typeof MOBILE_MQ.addEventListener === 'function') {
       MOBILE_MQ.addEventListener('change', syncLenisSpeed);
     }
