@@ -1054,6 +1054,12 @@ textarea:focus:not(:focus-visible) {
   display: none;
 }
 
+.menu_about-img {
+  width: auto;
+  max-width: none;
+  height: 20rem;
+}
+
 .section_logos .logos_item .image {
   opacity: .7;
 }
