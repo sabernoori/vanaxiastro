@@ -14,7 +14,7 @@ const inner = html.replace(/^[\s\S]*?<main[^>]*>\s*/, '').replace(/\s*<\/main>\s
 const markers = [
   { file: 'hero.html', start: '<section id="hero"' },
   { file: 'video.html', start: '<section id="video"' },
-  { file: 'why.html', start: '<!-- Daylight GSAP' },
+  { file: 'why.html', start: '<section id="why"' },
   { file: 'logos.html', start: '<section id="clients"' },
   { file: 'services.html', start: '<section id="services"' },
   { file: 'pharma.html', start: '<section id="pharma"' },

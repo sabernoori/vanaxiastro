@@ -2666,9 +2666,9 @@ a {
 }
 
 .image {
-  opacity: .3;
-  max-width: 80%;
-  max-height: 2.25rem;
+  opacity: 1;
+  max-width: 90%;
+  max-height: 2.5rem;
 }
 
 .hide {
