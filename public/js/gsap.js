@@ -328,16 +328,17 @@
         return;
       }
 
+      const isMobileShell = shell.classList.contains('is-mobile');
+
       gsap.set(headingScale, { scale: 3, transformOrigin: '50% 50%', force3D: true });
       gsap.set(stage, {
         scale: 0.8,
         transformOrigin: '50% 50%',
         backgroundColor: CARD_GRAY,
-        force3D: true
+        force3D: !isMobileShell
       });
       markReady();
 
-      const isMobileShell = shell.classList.contains('is-mobile');
       let settled = false;
       let tl;
 

@@ -1328,13 +1328,18 @@ textarea:focus:not(:focus-visible) {
   --services-pad: 10rem;
   --services-head-top: 6.5rem;
   --services-head-slot: 3.5rem;
-  overflow-x: clip;
   width: 100%;
   padding-top: var(--services-pad);
   padding-bottom: var(--services-pad);
   grid-column-gap: 2.5rem;
   grid-row-gap: var(--services-pad);
   row-gap: var(--services-pad);
+}
+
+@media screen and (min-width: 992px) {
+  .section_services.is-services-cover {
+    overflow-x: clip;
+  }
 }
 
 .section_services.is-services-cover > .heading-section {
@@ -1427,8 +1432,17 @@ textarea:focus:not(:focus-visible) {
   }
 
   .section_services.is-services-cover .services_cover-shell.is-mobile .services_scale {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
     overflow: visible;
-    will-change: auto;
+    will-change: transform;
+  }
+
+  .section_services.is-services-cover .services_cover-shell.is-mobile .max-width {
+    position: relative;
+    z-index: 1;
   }
 
   .section_services .services_box-mobile.is-services-stack .services_tab-content,
@@ -1451,7 +1465,8 @@ textarea:focus:not(:focus-visible) {
   }
 
   .section_services .services_box-mobile.is-services-stack {
-    position: relative;
+    position: relative !important;
+    transform: none;
   }
 
   .section_services .services_box-mobile.is-services-stack .services_tab-chrome {
@@ -1459,6 +1474,7 @@ textarea:focus:not(:focus-visible) {
     top: 0;
     z-index: 4;
     background-color: #fff;
+    transform: none;
   }
 
   .section_services .services_box-mobile.is-services-stack .services_tab-list {

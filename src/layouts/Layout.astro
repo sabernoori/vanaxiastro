@@ -17,6 +17,7 @@ const canonical = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL('/assets/images/6a6ba3019788fb2728d17441_Prestige.png', site).href;
 const ogDescription =
   'شریک استراتژیک سازمان‌ها در حمل‌ونقل سازمانی؛ سرویس پرسنل، ترانسفر و سفرهای بین‌شهری با تجربه بهتر و هزینه شفاف.';
+const assetVer = Date.now();
 ---
 
 <!doctype html>
@@ -100,12 +101,12 @@ const ogDescription =
       fetchpriority="low"
     />
 
-    <link rel="preload" href="/styles/webflow.css" as="style" />
-    <link rel="stylesheet" href="/styles/webflow.css" media="print" onload="this.media='all'" />
-    <link rel="stylesheet" href="/styles/custom.css" media="print" onload="this.media='all'" />
+    <link rel="preload" href={`/styles/webflow.css?v=${assetVer}`} as="style" />
+    <link rel="stylesheet" href={`/styles/webflow.css?v=${assetVer}`} media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href={`/styles/custom.css?v=${assetVer}`} media="print" onload="this.media='all'" />
     <noscript>
-      <link rel="stylesheet" href="/styles/webflow.css" />
-      <link rel="stylesheet" href="/styles/custom.css" />
+      <link rel="stylesheet" href={`/styles/webflow.css?v=${assetVer}`} />
+      <link rel="stylesheet" href={`/styles/custom.css?v=${assetVer}`} />
     </noscript>
 
     <style is:inline>
@@ -140,10 +141,10 @@ const ogDescription =
     <script is:inline defer src="/vendor/gsap.min.js"></script>
     <script is:inline defer src="/vendor/ScrollTrigger.min.js"></script>
     <script is:inline defer src="/vendor/lenis.min.js"></script>
-    <script is:inline defer src="/js/script.js"></script>
-    <script is:inline defer src="/js/gsap.js"></script>
-    <script is:inline defer src="/js/logos-reel.js"></script>
-    <script is:inline defer src="/js/why-daylight.js"></script>
-    <script is:inline defer src="/js/kashida.js"></script>
+    <script is:inline defer src={`/js/script.js?v=${assetVer}`}></script>
+    <script is:inline defer src={`/js/gsap.js?v=${assetVer}`}></script>
+    <script is:inline defer src={`/js/logos-reel.js?v=${assetVer}`}></script>
+    <script is:inline defer src={`/js/why-daylight.js?v=${assetVer}`}></script>
+    <script is:inline defer src={`/js/kashida.js?v=${assetVer}`}></script>
   </body>
 </html>
