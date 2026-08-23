@@ -1006,8 +1006,9 @@
     }
 
     let activeIndex = 0;
-    let ignoreSpy = false;
+    let clickLock = -1;
     let ignoreTimer = 0;
+    let lockCapTimer = 0;
     let lastActivate = 0;
 
     function stuckOffset() {
@@ -1083,30 +1084,45 @@
       setProgressFill(0);
     }
 
+    function releaseClickLock() {
+      clickLock = -1;
+      window.clearTimeout(ignoreTimer);
+      window.clearTimeout(lockCapTimer);
+    }
+
+    function targetReached(index) {
+      const pane = panes[index];
+      if (!pane) return true;
+      return Math.abs(pane.getBoundingClientRect().top - spyLine()) < 56;
+    }
+
+    function tryRelease(index) {
+      if (clickLock !== index) return;
+      if (targetReached(index)) {
+        releaseClickLock();
+        return;
+      }
+      ignoreTimer = window.setTimeout(() => tryRelease(index), 80);
+    }
+
     function scrollToPane(index) {
       const pane = panes[index];
       if (!pane) return;
-      setActive(index);
-      ignoreSpy = true;
       window.clearTimeout(ignoreTimer);
+      window.clearTimeout(lockCapTimer);
+      clickLock = index;
+      setActive(index);
       settleIntro();
+      lockCapTimer = window.setTimeout(releaseClickLock, 2000);
 
       const run = () => {
         goToY(paneTargetY(pane), 1.05, () => {
           const corrected = paneTargetY(pane);
           if (Math.abs(corrected - getScrollY()) > 20) {
-            goToY(corrected, 0.3, () => {
-              ignoreTimer = window.setTimeout(() => {
-                ignoreSpy = false;
-                spy();
-              }, 200);
-            });
+            goToY(corrected, 0.3, () => tryRelease(index));
             return;
           }
-          ignoreTimer = window.setTimeout(() => {
-            ignoreSpy = false;
-            spy();
-          }, 200);
+          tryRelease(index);
         });
       };
 
@@ -1114,7 +1130,8 @@
     }
 
     function spy() {
-      if (ignoreSpy || !window.matchMedia(MOBILE_MQ).matches) return;
+      if (!window.matchMedia(MOBILE_MQ).matches) return;
+      if (clickLock >= 0) return;
       const line = spyLine();
       let next = 0;
       panes.forEach((pane, i) => {
