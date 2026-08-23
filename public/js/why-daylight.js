@@ -3,7 +3,7 @@
  *
  * Mirrors godaylight.com UspMotion:
  *   desktop = one scrubbed timeline (y conveyor + exclusive autoAlpha + masked line rise)
- *   mobile  = per-item play-once (line rise + clip-path aperture + image scale 1.8 → 1)
+ *   tablet/mobile = no text motion (images stay on the original Why GSAP)
  *
  * Scoped to `.section_why.is-why-daylight` so the previous Why GSAP can be restored
  * by removing that class and this script.
@@ -48,8 +48,8 @@
       fixed: fixed || content,
       heading: heading,
       subhead: subhead,
-      headingInner: maskEl(heading),
-      subheadInner: maskEl(subhead),
+      headingInner: null,
+      subheadInner: null,
       wrapper: wrapper,
       img: img
     };
@@ -79,6 +79,11 @@
 
     // Desktop: one scrubbed timeline. Playhead is 0–100% of SCROLL_START → SCROLL_END.
     mm.add('(min-width: 992px)', () => {
+      cards.forEach((card) => {
+        card.headingInner = maskEl(card.heading);
+        card.subheadInner = maskEl(card.subhead);
+      });
+
       // fadeIn: 0 cannot start before this window. Change START to come in sooner.
       // start = list TOP vs viewport. Higher % = sooner (80% is near the bottom).
       // end   = list BOTTOM vs viewport. Lower % = later finish.
@@ -188,49 +193,6 @@
         gsap.set(
           cards.flatMap((card) => [card.headingInner, card.subheadInner].filter(Boolean)),
           { clearProps: 'transform,opacity,visibility' }
-        );
-      };
-    });
-
-    // Mobile: per-card enter (Godaylight mobile matchMedia)
-    mm.add('(max-width: 991px)', () => {
-      const triggers = [];
-
-      cards.forEach((card) => {
-        const lineTargets = [card.headingInner, card.subheadInner].filter(Boolean);
-
-        if (lineTargets.length) {
-          gsap.set(lineTargets, { yPercent: 100 });
-          triggers.push(
-            gsap.fromTo(
-              lineTargets,
-              { yPercent: 100 },
-              {
-                yPercent: 0,
-                duration: 0.66,
-                ease: 'expo.out',
-                stagger: 0.15,
-                scrollTrigger: {
-                  trigger: card.item,
-                  start: 'top 70%',
-                  once: true
-                }
-              }
-            )
-          );
-        }
-
-        // Images stay on the original Why GSAP (scale + parallax).
-      });
-
-      return () => {
-        triggers.forEach((tween) => {
-          if (tween.scrollTrigger) tween.scrollTrigger.kill();
-          tween.kill();
-        });
-        gsap.set(
-          cards.flatMap((card) => [card.headingInner, card.subheadInner].filter(Boolean)),
-          { clearProps: 'transform' }
         );
       };
     });
