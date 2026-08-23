@@ -337,15 +337,46 @@
       });
       markReady();
 
-      const tl = gsap.timeline({
+      const isMobileShell = shell.classList.contains('is-mobile');
+      let settled = false;
+      let tl;
+
+      function settleStage() {
+        if (settled) return;
+        settled = true;
+        if (tl) {
+          if (tl.scrollTrigger) tl.scrollTrigger.kill();
+          tl.pause();
+          tl.kill();
+        }
+        gsap.set(headingScale, { scale: 1, clearProps: 'transform' });
+        gsap.set(stage, {
+          scale: 1,
+          yPercent: 0,
+          backgroundColor: CARD_WHITE,
+          clearProps: 'transform',
+          willChange: 'auto'
+        });
+        stage.style.transform = 'none';
+        stage.style.willChange = 'auto';
+      }
+
+      if (isMobileShell) {
+        window.__completeServicesIntro = settleStage;
+      }
+
+      tl = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: heading,
           start: 'top 85%',
           endTrigger: shell,
-          end: 'top 8%',
+          end: isMobileShell ? 'top 32%' : 'top 8%',
           scrub: true,
-          invalidateOnRefresh: true
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            if (isMobileShell && self.progress >= 0.98) settleStage();
+          }
         }
       });
 
@@ -364,6 +395,9 @@
       );
 
       return () => {
+        if (isMobileShell && window.__completeServicesIntro === settleStage) {
+          window.__completeServicesIntro = null;
+        }
         if (tl.scrollTrigger) tl.scrollTrigger.kill();
         tl.kill();
         gsap.set(headingScale, { clearProps: 'transform' });

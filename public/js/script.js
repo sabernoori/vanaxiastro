@@ -947,6 +947,230 @@
 // ==========================================
 
 // ==========================================
+// START: Mobile Services Stack Scroll
+// Tablet/phone: all panes stay stacked. Tabs scroll to a pane.
+// ==========================================
+(function() {
+  'use strict';
+
+  const MOBILE_MQ = '(max-width: 991px)';
+
+  function getScrollY() {
+    if (window.lenis && typeof window.lenis.scroll === 'number') {
+      return window.lenis.scroll;
+    }
+    return window.pageYOffset || document.documentElement.scrollTop || 0;
+  }
+
+  function init() {
+    const root = document.querySelector('.services_box-mobile.is-services-stack');
+    if (!root) return;
+
+    const tabList = root.querySelector('.services_tab-list');
+    const chrome = root.querySelector('.services_tab-chrome') || tabList;
+    const progressEl = root.querySelector('.services_tab-progress .services_progress');
+    const tabs = Array.from(root.querySelectorAll('.services_tab'));
+    const panes = tabs.map((tab) => {
+      const href = tab.getAttribute('href') || '';
+      const id = href.charAt(0) === '#' ? href.slice(1) : '';
+      if (id) {
+        const byId = document.getElementById(id);
+        if (byId) return byId;
+      }
+      const key = tab.getAttribute('data-w-tab');
+      if (!key) return null;
+      return root.querySelector('.services_pane[data-w-tab="' + key + '"], .w-tab-pane[data-w-tab="' + key + '"]');
+    });
+    if (!tabs.length || panes.some((pane) => !pane)) return;
+
+    root.classList.remove('w-tabs');
+    if (tabList) tabList.classList.remove('w-tab-menu');
+    tabs.forEach((tab) => {
+      tab.classList.remove('w-tab-link');
+      tab.setAttribute('role', 'tab');
+    });
+    panes.forEach((pane) => {
+      pane.classList.add('services_pane');
+      pane.classList.remove('w-tab-pane');
+      pane.hidden = false;
+      pane.style.setProperty('display', 'block', 'important');
+      pane.style.setProperty('opacity', '1');
+      pane.style.setProperty('height', 'auto');
+    });
+
+    const content = root.querySelector('.services_tab-content');
+    if (content) {
+      content.classList.remove('w-tab-content');
+      content.style.overflow = 'visible';
+      content.style.height = 'auto';
+    }
+
+    let activeIndex = 0;
+    let ignoreSpy = false;
+    let ignoreTimer = 0;
+    let lastActivate = 0;
+
+    function stuckOffset() {
+      return (chrome ? chrome.offsetHeight : 0) + 8;
+    }
+
+    function spyLine() {
+      if (!chrome) return stuckOffset();
+      const bottom = chrome.getBoundingClientRect().bottom;
+      return (bottom > 0 ? bottom : stuckOffset()) + 8;
+    }
+
+    function setProgressFill(amount) {
+      if (!progressEl) return;
+      const value = Math.max(0, Math.min(1, amount));
+      progressEl.style.transform = 'scaleX(' + value + ')';
+    }
+
+    function currentPaneProgress() {
+      const pane = panes[activeIndex];
+      if (!pane) return 0;
+      const next = panes[activeIndex + 1];
+      const line = spyLine();
+      const start = pane.getBoundingClientRect().top;
+      const end = next ? next.getBoundingClientRect().top : pane.getBoundingClientRect().bottom;
+      const span = end - start;
+      if (span <= 1) return 0;
+      return (line - start) / span;
+    }
+
+    function paneTargetY(pane) {
+      return Math.max(0, Math.round(getScrollY() + pane.getBoundingClientRect().top - stuckOffset()));
+    }
+
+    function goToY(y, duration, onComplete) {
+      const lenis = window.lenis;
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(y, { duration: duration, force: true, onComplete: onComplete });
+        return;
+      }
+      window.scrollTo({ top: y, behavior: duration === 0 ? 'auto' : 'smooth' });
+      if (typeof onComplete === 'function') {
+        window.setTimeout(onComplete, duration === 0 ? 0 : 400);
+      }
+    }
+
+    function settleIntro() {
+      if (typeof window.__completeServicesIntro === 'function') {
+        window.__completeServicesIntro();
+      }
+      const stage = document.querySelector('.services_cover-shell.is-mobile .services_scale');
+      if (stage) {
+        stage.style.transform = 'none';
+        stage.style.willChange = 'auto';
+      }
+    }
+
+    function setActive(index) {
+      if (index < 0 || index >= tabs.length) return;
+      activeIndex = index;
+      const key = tabs[index].getAttribute('data-w-tab');
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.classList.toggle('w--current', on);
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        tab.setAttribute('tabindex', on ? '0' : '-1');
+      });
+      panes.forEach((pane, i) => {
+        pane.classList.toggle('is-active', i === index);
+        pane.classList.toggle('w--tab-active', i === index);
+      });
+      if (key) root.setAttribute('data-current', key);
+      setProgressFill(0);
+    }
+
+    function scrollToPane(index) {
+      const pane = panes[index];
+      if (!pane) return;
+      setActive(index);
+      ignoreSpy = true;
+      window.clearTimeout(ignoreTimer);
+      settleIntro();
+
+      const run = () => {
+        goToY(paneTargetY(pane), 1.05, () => {
+          const corrected = paneTargetY(pane);
+          if (Math.abs(corrected - getScrollY()) > 20) {
+            goToY(corrected, 0.3, () => {
+              ignoreTimer = window.setTimeout(() => {
+                ignoreSpy = false;
+                spy();
+              }, 200);
+            });
+            return;
+          }
+          ignoreTimer = window.setTimeout(() => {
+            ignoreSpy = false;
+            spy();
+          }, 200);
+        });
+      };
+
+      window.requestAnimationFrame(() => window.requestAnimationFrame(run));
+    }
+
+    function spy() {
+      if (ignoreSpy || !window.matchMedia(MOBILE_MQ).matches) return;
+      const line = spyLine();
+      let next = 0;
+      panes.forEach((pane, i) => {
+        if (pane.getBoundingClientRect().top - line <= 0) next = i;
+      });
+      if (next !== activeIndex) setActive(next);
+      setProgressFill(currentPaneProgress());
+    }
+
+    function onTabActivate(event) {
+      if (!window.matchMedia(MOBILE_MQ).matches) return;
+      const tab = event.target.closest('.services_box-mobile.is-services-stack .services_tab');
+      if (!tab || !root.contains(tab)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (typeof event.stopImmediatePropagation === 'function') {
+        event.stopImmediatePropagation();
+      }
+      const now = Date.now();
+      if (now - lastActivate < 350) return;
+      lastActivate = now;
+      const index = tabs.indexOf(tab);
+      if (index >= 0) scrollToPane(index);
+    }
+
+    window.addEventListener('pointerdown', onTabActivate, true);
+    window.addEventListener('click', onTabActivate, true);
+
+    window.addEventListener('scroll', spy, { passive: true });
+    const bindLenis = () => {
+      if (!window.lenis || typeof window.lenis.on !== 'function') return false;
+      window.lenis.on('scroll', spy);
+      return true;
+    };
+    if (!bindLenis()) {
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries += 1;
+        if (bindLenis() || tries > 40) clearInterval(timer);
+      }, 100);
+    }
+
+    setActive(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+// ==========================================
+// END: Mobile Services Stack Scroll
+// ==========================================
+
+// ==========================================
 // START: FAQ Accordion
 // ==========================================
 (function() {

@@ -278,12 +278,12 @@
       <div class="services_cover-shell is-mobile">
       <div class="services_scale">
       <div class="max-width">
-      <div data-current="On-demand" data-easing="ease" data-duration-in="300" data-duration-out="100"
-                class="services_box-mobile w-tabs">
-        <div class="services_tab-list w-tab-menu" id="services-mobile-tabs">
-          <a href="#services-mobile-tabs" data-w-tab="On-demand"
+      <div data-current="On-demand" class="services_box-mobile is-services-stack">
+        <div class="services_tab-chrome">
+        <div class="services_tab-list" id="services-mobile-tabs" role="tablist">
+          <a href="#service-mobile-on-demand" data-w-tab="On-demand"
                         id="w-node-b4ebbaa3-d87f-08f9-8c2e-35006232b9a3-f764d7d6"
-                        class="services_tab w-inline-block w-tab-link w--current">
+                        class="services_tab w-inline-block w--current">
             <span class="services_tab-text">سفر در اختیار</span>
             <div class="icon-24">
               <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24"
@@ -297,7 +297,7 @@
               </svg>
             </div>
           </a>
-          <a href="#services-mobile-tabs" data-w-tab="city-to-city" class="services_tab w-inline-block w-tab-link">
+          <a href="#service-mobile-city-to-city" data-w-tab="city-to-city" class="services_tab w-inline-block">
             <span class="services_tab-text">بین شهری</span>
             <div class="icon-24">
               <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24"
@@ -314,7 +314,7 @@
               </svg>
             </div>
           </a>
-          <a href="#services-mobile-tabs" data-w-tab="transfer" class="services_tab w-inline-block w-tab-link">
+          <a href="#service-mobile-transfer" data-w-tab="transfer" class="services_tab w-inline-block">
             <span class="services_tab-text">ترانسفر</span>
             <div class="icon-24">
               <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24"
@@ -325,8 +325,8 @@
               </svg>
             </div>
           </a>
-          <a href="#services-mobile-tabs" data-w-tab="commute" id="w-node-dc1657d3-9d98-2dba-2b53-56f35df60bf1-f764d7d6"
-                        class="services_tab w-inline-block w-tab-link">
+          <a href="#service-mobile-commute" data-w-tab="commute" id="w-node-dc1657d3-9d98-2dba-2b53-56f35df60bf1-f764d7d6"
+                        class="services_tab w-inline-block">
             <span class="services_tab-text">سرویس و رویداد</span>
             <div class="icon-24">
               <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24"
@@ -347,8 +347,12 @@
             </div>
           </a>
         </div>
-        <div class="services_tab-content w-tab-content">
-          <div data-w-tab="On-demand" class="w-tab-pane w--tab-active">
+        <div class="services_tab-progress" aria-hidden="true">
+          <div class="services_progress is-visible"></div>
+        </div>
+        </div>
+        <div class="services_tab-content">
+          <div id="service-mobile-on-demand" data-w-tab="On-demand" class="services_pane is-active">
             <div class="services_item-inside-box">
               <div id="w-node-_3af03300-0cb7-f727-23e6-a5924901ea87-f764d7d6"
                                 class="services_img-wrapper-tlm">
@@ -401,7 +405,7 @@
               </div>
             </div>
           </div>
-          <div data-w-tab="city-to-city" class="w-tab-pane">
+          <div id="service-mobile-city-to-city" data-w-tab="city-to-city" class="services_pane">
             <div class="services_item-inside-box">
               <div id="w-node-b3951e5e-c489-2f36-6f09-c54d1e83a3a1-f764d7d6"
                                 class="services_img-wrapper-tlm">
@@ -463,7 +467,7 @@
               </div>
             </div>
           </div>
-          <div data-w-tab="transfer" class="w-tab-pane">
+          <div id="service-mobile-transfer" data-w-tab="transfer" class="services_pane">
             <div class="services_item-inside-box">
               <div id="w-node-_1888558a-c085-a499-b531-0da5ed1b5209-f764d7d6"
                                 class="services_img-wrapper-tlm">
@@ -508,7 +512,7 @@
               </div>
             </div>
           </div>
-          <div data-w-tab="commute" class="w-tab-pane">
+          <div id="service-mobile-commute" data-w-tab="commute" class="services_pane">
             <div class="services_item-inside-box">
               <div id="w-node-_558f1a98-47a3-f251-c2ed-b30c688dd044-f764d7d6"
                                 class="services_img-wrapper-tlm">
