@@ -2865,12 +2865,14 @@ a {
   justify-content: flex-start;
   align-items: center;
   width: 100vw;
-  height: 100vh;
   padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding-bottom: 0;
   display: flex;
   position: relative;
   overflow: hidden;
+  grid-column-gap: 5rem;
+  grid-row-gap: 5rem;
+  color: var(--colors--white);
 }
 
 .pharma_heading {
@@ -2878,6 +2880,8 @@ a {
   color: var(--colors--white);
   font-size: clamp(1.25rem, 5vw, 3rem);
   line-height: 1.7;
+  text-align: center;
+  text-wrap: balance;
 }
 
 .pharma_highlight {
@@ -2886,6 +2890,7 @@ a {
   padding-top: .25rem;
   padding-left: .3rem;
   padding-right: .3rem;
+  white-space: nowrap;
 }
 
 .section_process {
@@ -4274,6 +4279,8 @@ a {
 
   .section_pharma {
     background-position: 50%;
+    grid-column-gap: 4rem;
+    grid-row-gap: 4rem;
   }
 
   .process_wrapper {
@@ -5010,9 +5017,6 @@ a {
 
   .section_pharma {
     background-image: url("/assets/images/6a6d92e98fc171e8f27b0b07_pharma-bg-mob.avif");
-    height: 80vh;
-    padding-top: 3rem;
-    padding-bottom: 3rem;
   }
 
   .pharma_heading {
