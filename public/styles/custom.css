@@ -1417,6 +1417,46 @@ textarea:focus:not(:focus-visible) {
   .section_services.is-services-cover .services_cover-shell.is-mobile {
     display: block;
   }
+
+  /*
+   * Intro card is #e6eaf3 while it scales in. Tab opacity on a transformed
+   * parent also flattens, so every tab looks selected and the current pill
+   * disappears into the gray. Keep the bar white and fade inner content only.
+   */
+  .section_services .services_box-mobile .services_tab-list {
+    background-color: #fff;
+    isolation: isolate;
+  }
+
+  .section_services .services_box-mobile .services_tab,
+  .section_services .services_box-mobile .services_tab.w-inline-block,
+  .section_services .services_box-mobile .services_tab.w-tab-link {
+    opacity: 1;
+    background-color: transparent;
+    color: var(--colors--blue-darkest);
+  }
+
+  .section_services .services_box-mobile .services_tab .services_tab-text,
+  .section_services .services_box-mobile .services_tab .icon-24 {
+    opacity: 0.55;
+  }
+
+  .section_services .services_box-mobile .services_tab.w--current,
+  .section_services .services_box-mobile .services_tab.w-tab-link.w--current,
+  .section_services .services_box-mobile:not(:has(.services_tab.w--current)) .services_tab[data-w-tab="On-demand"] {
+    background-color: var(--colors--blueish-gray);
+    color: var(--colors--blue-lighter);
+    border-radius: 0.5rem;
+    opacity: 1;
+  }
+
+  .section_services .services_box-mobile .services_tab.w--current .services_tab-text,
+  .section_services .services_box-mobile .services_tab.w--current .icon-24,
+  .section_services .services_box-mobile:not(:has(.services_tab.w--current)) .services_tab[data-w-tab="On-demand"] .services_tab-text,
+  .section_services .services_box-mobile:not(:has(.services_tab.w--current)) .services_tab[data-w-tab="On-demand"] .icon-24 {
+    opacity: 1;
+    color: inherit;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
