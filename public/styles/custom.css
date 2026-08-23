@@ -1054,6 +1054,11 @@ textarea:focus:not(:focus-visible) {
   display: none;
 }
 
+.section_logos .logos_item .image {
+  opacity: 0.7;
+  filter: invert(1);
+}
+
 /* Inactive service titles: 24px bold needs 3:1 (was 2.03 at 0.3) */
 .services_item-title-holder.is-not-active {
   opacity: 0.44;

@@ -1579,19 +1579,6 @@
     // Do not set dir=rtl on <html> — Webflow layout owns direction
   }
 
-  function injectSkipLink() {
-    if (document.querySelector('.skip-link')) return;
-    const main = document.getElementById('main-content') || document.querySelector('main');
-    if (!main) return;
-    if (!main.id) main.id = 'main-content';
-
-    const link = document.createElement('a');
-    link.className = 'skip-link';
-    link.href = '#' + main.id;
-    link.textContent = 'پرش به محتوای اصلی';
-    document.body.insertBefore(link, document.body.firstChild);
-  }
-
   function hideDecorativeSvgs() {
     document.querySelectorAll('.icon-24 svg, .burger-icon svg, .close-icon svg, .back-icon svg, .faq_icon svg').forEach((svg) => {
       svg.setAttribute('aria-hidden', 'true');
@@ -1634,7 +1621,6 @@
 
   function init() {
     ensureDocumentLang();
-    injectSkipLink();
     hideDecorativeSvgs();
     labelSocialLinks();
     enhanceStoryCards();
