@@ -21,14 +21,13 @@
   function initLenisSmoothScroll() {
     if (window.__vanaxiLenis) return window.__vanaxiLenis;
     if (REDUCE_MOTION) return null;
-    if (typeof Lenis === 'undefined') {
-      console.warn('GSAP: Lenis not loaded — native scroll only');
-      return null;
-    }
+    const MOBILE_MQ = window.matchMedia('(max-width: 991px)');
+    // Native touch scroll on small screens — Lenis + ticker is extra main-thread work.
+    if (MOBILE_MQ.matches) return null;
+    if (typeof Lenis === 'undefined') return null;
 
     const WHEEL_DEFAULT = 0.85;
     const TOUCH_DEFAULT = 1.35;
-    const MOBILE_MQ = window.matchMedia('(max-width: 991px)');
 
     const lenis = new Lenis({
       // Higher duration = slower/smoother settle. Lower wheelMultiplier = less distance per tick.
