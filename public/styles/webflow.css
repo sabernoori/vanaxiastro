@@ -2446,7 +2446,7 @@ a {
 .section_video {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1440 / 724;
+  aspect-ratio: var(--video-ar, 2 / 3);
   width: 100%;
   background-color: #000b22;
 }
@@ -4799,10 +4799,6 @@ a {
 
   .section_hero {
     padding-top: 10rem;
-  }
-
-  .section_video {
-    aspect-ratio: 2 / 3;
   }
 
   .button {
