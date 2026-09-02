@@ -1076,6 +1076,8 @@ textarea:focus:not(:focus-visible) {
 
 .section_logos .logos_item .image {
   opacity: .7;
+  width: auto;
+  height: auto;
 }
 
 .logos_item[data-logo-reel] {
@@ -1160,6 +1162,12 @@ textarea:focus:not(:focus-visible) {
 
 .footer_img {
   min-width: 0;
+  height: auto;
+  aspect-ratio: 2012 / 673;
+}
+
+.designer_img {
+  height: auto;
 }
 
 .section_story .story_grid {

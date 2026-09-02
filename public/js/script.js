@@ -779,9 +779,9 @@
       if (immediate) {
         img.style.transition = 'none';
         img.style.opacity = isActive ? '1' : '0';
-        // Force reflow then restore CSS transition for later fades
-        void img.offsetWidth;
-        img.style.transition = '';
+        requestAnimationFrame(() => {
+          img.style.transition = '';
+        });
       } else {
         img.style.opacity = isActive ? '1' : '0';
       }
@@ -1229,7 +1229,6 @@
 
     const start = answer.scrollHeight || answer.offsetHeight || 0;
     setAnswerHeight(answer, start + 'px');
-    void answer.offsetHeight;
 
     const finish = () => {
       clearHeightListener(answer);
@@ -1244,7 +1243,9 @@
     };
     answer.addEventListener('transitionend', answer._faqHeightHandler);
     answer._faqFallbackTimer = window.setTimeout(finish, 400);
-    setAnswerHeight(answer, '0px');
+    requestAnimationFrame(() => {
+      setAnswerHeight(answer, '0px');
+    });
   }
 
   function expandAnswer(answer, immediate) {
@@ -1264,9 +1265,10 @@
     }
 
     setAnswerHeight(answer, '0px');
-    void answer.offsetHeight;
-    const target = answer.scrollHeight;
-    setAnswerHeight(answer, Math.max(target, 1) + 'px');
+    requestAnimationFrame(() => {
+      const target = answer.scrollHeight;
+      setAnswerHeight(answer, Math.max(target, 1) + 'px');
+    });
 
     const finish = () => {
       clearHeightListener(answer);
@@ -1732,8 +1734,9 @@
   function expandText(textEl) {
     clearHeightListener(textEl);
     textEl.style.height = textEl.offsetHeight + 'px';
-    void textEl.offsetHeight;
-    textEl.style.height = textEl.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      textEl.style.height = textEl.scrollHeight + 'px';
+    });
 
     const finish = () => {
       clearHeightListener(textEl);
@@ -1752,8 +1755,9 @@
   function collapseText(textEl) {
     clearHeightListener(textEl);
     textEl.style.height = textEl.scrollHeight + 'px';
-    void textEl.offsetHeight;
-    textEl.style.height = COLLAPSED_HEIGHT;
+    requestAnimationFrame(() => {
+      textEl.style.height = COLLAPSED_HEIGHT;
+    });
 
     const finish = () => {
       clearHeightListener(textEl);

@@ -81,10 +81,8 @@
       }
     }
 
-    function sectionInView(el) {
-      const r = el.getBoundingClientRect();
-      return r.bottom > 0 && r.top < window.innerHeight;
-    }
+    const speedSections = Array.from(document.querySelectorAll('[data-scroll-speed]'));
+    const speedInView = new Set();
 
     function syncLenisSpeed() {
       const isMobile = MOBILE_MQ.matches;
@@ -92,8 +90,8 @@
       let touch = TOUCH_DEFAULT;
       let syncTouch = false;
 
-      document.querySelectorAll('[data-scroll-speed]').forEach((el) => {
-        if (!sectionInView(el)) return;
+      speedSections.forEach((el) => {
+        if (!speedInView.has(el)) return;
         const speed = speedForSection(el, isMobile);
         if (speed == null) return;
         wheel = speed;
@@ -105,15 +103,27 @@
       applyLenisSpeed(wheel, touch, syncTouch);
     }
 
-    window.addEventListener('wheel', syncLenisSpeed, { capture: true, passive: true });
-    window.addEventListener('touchstart', syncLenisSpeed, { capture: true, passive: true });
-    window.addEventListener('touchmove', syncLenisSpeed, { capture: true, passive: true });
+    if (speedSections.length && typeof IntersectionObserver !== 'undefined') {
+      const speedObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) speedInView.add(entry.target);
+            else speedInView.delete(entry.target);
+          });
+          syncLenisSpeed();
+        },
+        { threshold: 0 }
+      );
+      speedSections.forEach((el) => speedObserver.observe(el));
+    } else {
+      speedSections.forEach((el) => speedInView.add(el));
+    }
+
     if (typeof MOBILE_MQ.addEventListener === 'function') {
       MOBILE_MQ.addEventListener('change', syncLenisSpeed);
     }
     lenis.on('scroll', () => {
       ScrollTrigger.update();
-      syncLenisSpeed();
     });
     syncLenisSpeed();
 

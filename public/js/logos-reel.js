@@ -22,6 +22,11 @@
     img.src = src;
   }
 
+  function applyFaceSize(img, face) {
+    if (face.width) img.setAttribute('width', String(face.width));
+    if (face.height) img.setAttribute('height', String(face.height));
+  }
+
   function makeCell(face, height) {
     const cell = document.createElement('div');
     cell.className = 'logos_reel-cell';
@@ -32,6 +37,7 @@
     img.src = face.src;
     img.decoding = 'async';
     img.draggable = false;
+    applyFaceSize(img, face);
     cell.appendChild(img);
     return cell;
   }
@@ -45,8 +51,18 @@
     const pairSrc = item.getAttribute('data-logo-pair');
     if (!img || !pairSrc || item.querySelector('.logos_reel-window')) return null;
 
-    const home = { src: img.getAttribute('src'), alt: img.getAttribute('alt') || '' };
-    const extra = { src: pairSrc, alt: item.getAttribute('data-logo-pair-alt') || '' };
+    const home = {
+      src: img.getAttribute('src'),
+      alt: img.getAttribute('alt') || '',
+      width: img.getAttribute('width'),
+      height: img.getAttribute('height')
+    };
+    const extra = {
+      src: pairSrc,
+      alt: item.getAttribute('data-logo-pair-alt') || '',
+      width: item.getAttribute('data-logo-pair-width'),
+      height: item.getAttribute('data-logo-pair-height')
+    };
     preload(extra.src);
     img.remove();
 
