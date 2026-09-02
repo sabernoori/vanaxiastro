@@ -4270,7 +4270,8 @@ a {
 
   .services_tab {
     background-color: var(--colors--white);
-    opacity: .6;
+    opacity: 1;
+    color: #3d4454;
     white-space: nowrap;
     flex-flow: row;
     justify-content: flex-start;

@@ -965,6 +965,20 @@ textarea:focus:not(:focus-visible) {
   color: inherit;
 }
 
+.services_suit-heading {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.services_tab-text {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
 .footer .text-small.opacity-50,
 .process_stat .text-small.opacity-50,
 .faq_heading-wrapper .opacity-50,
@@ -1525,7 +1539,7 @@ textarea:focus:not(:focus-visible) {
 
   .section_services .services_box-mobile .services_tab .services_tab-text,
   .section_services .services_box-mobile .services_tab .icon-24 {
-    opacity: 0.55;
+    opacity: 0.75;
   }
 
   .section_services .services_box-mobile .services_tab.w--current,
@@ -1858,7 +1872,8 @@ html.w-mod-js .section_why.is-why-daylight .why_img {
     justify-content: flex-start;
     align-items: center;
     background-color: var(--colors--white);
-    opacity: 0.6;
+    opacity: 1;
+    color: #3d4454;
     white-space: nowrap;
   }
 
