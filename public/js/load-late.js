@@ -1,5 +1,5 @@
 /**
- * Load below-the-fold scripts after first paint.
+ * Load JS after first paint so the hero can become LCP without waiting on GSAP.
  * Mobile skips jQuery / Webflow / Lenis — those are desktop dropdown + smooth scroll.
  */
 (function () {
@@ -13,6 +13,12 @@
   }
   var q = ver ? '?v=' + ver : '';
 
+  var coreSrcs = [
+    '/vendor/gsap.min.js',
+    '/vendor/ScrollTrigger.min.js',
+    '/js/script.js' + q,
+    '/js/gsap.js' + q
+  ];
   var idleSrcs = [
     '/js/kashida.js' + q,
     '/js/logos-reel.js' + q,
@@ -24,6 +30,7 @@
     '/vendor/lenis.min.js'
   ];
 
+  var coreStarted = false;
   var idleStarted = false;
   var desktopStarted = false;
 
@@ -64,6 +71,24 @@
     loadDesktop();
   }
 
+  function loadCore() {
+    if (coreStarted) return;
+    coreStarted = true;
+    loadSeq(coreSrcs, function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(onIdle, { timeout: 2200 });
+      } else {
+        setTimeout(onIdle, 1);
+      }
+    });
+  }
+
+  function afterFirstPaint(fn) {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(fn);
+    });
+  }
+
   var nav = document.getElementById('site-header');
   if (nav) {
     nav.addEventListener('pointerenter', loadDesktop, { once: true });
@@ -76,13 +101,7 @@
     });
   }
 
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(onIdle, { timeout: 2200 });
-  } else if (document.readyState === 'complete') {
-    setTimeout(onIdle, 1);
-  } else {
-    window.addEventListener('load', function () {
-      setTimeout(onIdle, 1);
-    });
-  }
+  window.addEventListener('pointerdown', loadCore, { once: true, passive: true });
+  window.addEventListener('keydown', loadCore, { once: true });
+  afterFirstPaint(loadCore);
 })();

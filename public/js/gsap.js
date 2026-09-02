@@ -11,6 +11,10 @@
   }
 
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({
+    ignoreMobileResize: true,
+    autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load'
+  });
 
   const REDUCE_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -133,10 +137,6 @@
 
     window.lenis = lenis;
     window.__vanaxiLenis = lenis;
-
-    // Keep ScrollTrigger measurements in sync after fonts/images settle
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true });
 
     return lenis;
   }
