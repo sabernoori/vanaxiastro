@@ -1166,6 +1166,22 @@ textarea:focus:not(:focus-visible) {
   aspect-ratio: 2012 / 673;
 }
 
+.section_video-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 0% 50%;
+  display: block;
+}
+
+@media screen and (max-width: 767px) {
+  .section_video-img {
+    object-position: 20% 50%;
+  }
+}
+
 .designer_img {
   height: auto;
 }

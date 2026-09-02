@@ -2444,10 +2444,11 @@ a {
 }
 
 .section_video {
-  aspect-ratio: 1440 / 725;
-  background-image: url("/assets/images/6a6b3faccd46c45ce795f994_hero-img.avif");
-  background-position: 0%;
-  background-size: cover;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1440 / 724;
+  width: 100%;
+  background-color: #000b22;
 }
 
 .section_why {
@@ -4800,6 +4801,10 @@ a {
     padding-top: 10rem;
   }
 
+  .section_video {
+    aspect-ratio: 2 / 3;
+  }
+
   .button {
     height: 3rem;
   }
@@ -4973,11 +4978,6 @@ a {
 
   .hero_content, .button {
     width: 100%;
-  }
-
-  .section_video {
-    aspect-ratio: 2 / 3;
-    background-position: 20%;
   }
 
   .logos_grid {
