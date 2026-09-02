@@ -2754,7 +2754,8 @@ a {
 }
 
 .services_item-title-holder.is-not-active {
-  opacity: .3;
+  opacity: 1;
+  color: #3d4454;
 }
 
 .services_item-content-holder {

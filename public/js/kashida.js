@@ -35,7 +35,7 @@
 
   var observer = null;
   var io = null;
-  var probe = null;
+  var probeCtx = null;
   var bound = [];
   var raf = 0;
   var resizeTimer = 0;
@@ -181,17 +181,14 @@
   }
 
   function ensureProbe() {
-    if (probe && probe.isConnected) return probe;
-    probe = document.createElement('span');
-    probe.setAttribute('aria-hidden', 'true');
-    probe.style.cssText =
-      'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;display:inline-block;pointer-events:none;';
-    document.body.appendChild(probe);
-    return probe;
+    if (probeCtx) return probeCtx;
+    var canvas = document.createElement('canvas');
+    probeCtx = canvas.getContext('2d');
+    return probeCtx;
   }
 
   function makeMeasure(cs) {
-    var p = ensureProbe();
+    var ctx = ensureProbe();
     var key =
       cs.font +
       '|' +
@@ -203,23 +200,12 @@
       '|' +
       cs.fontFeatureSettings;
     if (key !== probeFontKey) {
-      p.style.font = cs.font;
-      p.style.fontSize = cs.fontSize;
-      p.style.fontFamily = cs.fontFamily;
-      p.style.fontWeight = cs.fontWeight;
-      p.style.fontStyle = cs.fontStyle;
-      p.style.letterSpacing = cs.letterSpacing;
-      p.style.wordSpacing = cs.wordSpacing;
-      p.style.direction = cs.direction;
-      p.style.fontFeatureSettings = cs.fontFeatureSettings;
-      p.style.fontKerning = cs.fontKerning;
-      p.style.textTransform = cs.textTransform;
+      ctx.font = cs.font || ((cs.fontWeight || '400') + ' ' + (cs.fontSize || '16px') + ' ' + (cs.fontFamily || 'sans-serif'));
       probeFontKey = key;
       cachedTatweelW = 0;
     }
     return function measure(str) {
-      p.textContent = str || '';
-      return p.getBoundingClientRect().width;
+      return ctx.measureText(str || '').width;
     };
   }
 
@@ -469,12 +455,15 @@
 
   function flush() {
     raf = 0;
-    var list = pending;
-    pending = [];
-    var i;
-    for (i = 0; i < list.length; i++) {
-      list[i]._kashidaQueued = 0;
-      applyElement(list[i]);
+    if (!pending.length) return;
+    var start = performance.now();
+    while (pending.length && performance.now() - start < 8) {
+      var el = pending.shift();
+      el._kashidaQueued = 0;
+      applyElement(el);
+    }
+    if (pending.length) {
+      raf = requestAnimationFrame(flush);
     }
   }
 
@@ -607,8 +596,7 @@
     bound = [];
     probeFontKey = '';
     cachedTatweelW = 0;
-    if (probe && probe.parentNode) probe.parentNode.removeChild(probe);
-    probe = null;
+    probeCtx = null;
     if (!opts.keepOff) {
       /* leave data-kashida-src so re-init is cheap */
     }

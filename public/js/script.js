@@ -1435,6 +1435,8 @@
     video.setAttribute('preload', 'none');
     video.setAttribute('aria-hidden', 'true');
     video.setAttribute('data-wf-ignore', 'true');
+    video.setAttribute('width', '640');
+    video.setAttribute('height', '640');
     video.removeAttribute('autoplay');
     video.removeAttribute('id');
   }

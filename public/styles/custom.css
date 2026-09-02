@@ -1244,6 +1244,15 @@ textarea:focus:not(:focus-visible) {
     opacity 0.35s var(--ease-in-out-quint);
 }
 
+.services_item-title-holder.is-active {
+  color: var(--colors--blue-lighter);
+}
+
+.services_item-title-holder.is-not-active {
+  opacity: 1;
+  color: #3d4454;
+}
+
 /* Equal 2rem vertical padding on the box; bottom only while open */
 .services_box-desktop .services_item-inside-box {
   padding-top: 2rem;
