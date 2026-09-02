@@ -24,9 +24,13 @@
     '/js/logos-reel.js' + q,
     '/js/why-daylight.js' + q
   ];
+  // webflow.main waits on chunks 606 (dropdown) + 471 (tabs) before boot.
+  // Without main (or either chunk), desktop nav hover never opens.
   var desktopSrcs = [
     '/vendor/jquery.js',
     '/vendor/webflow.schunk.1.js',
+    '/vendor/webflow.schunk.2.js',
+    '/vendor/webflow.main.js',
     '/vendor/lenis.min.js'
   ];
 
@@ -74,6 +78,11 @@
   function loadCore() {
     if (coreStarted) return;
     coreStarted = true;
+    // Desktop: start Webflow/Lenis with the core stack so nav hover works
+    // before the idle callback (pointerenter alone is too late on first hover).
+    if (window.matchMedia('(min-width: 992px)').matches) {
+      loadDesktop();
+    }
     loadSeq(coreSrcs, function () {
       if ('requestIdleCallback' in window) {
         requestIdleCallback(onIdle, { timeout: 2200 });
