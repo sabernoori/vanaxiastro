@@ -253,15 +253,31 @@ a {
 }
 
 .section_hero {
-  background-image: url("/assets/images/6a6a5aff998615e9c54b0be7_hero-bg.avif");
-  background-position: 90%;
-  background-size: cover;
+  position: relative;
+  overflow: hidden;
+  background-color: #f4f6fb;
   flex-flow: column;
   justify-content: flex-start;
   align-items: center;
   padding-top: 11rem;
   padding-bottom: 5.5rem;
   display: flex;
+}
+
+.hero_bg-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 90% 50%;
+  pointer-events: none;
+}
+
+.section_hero > .max-width {
+  position: relative;
+  z-index: 1;
 }
 
 .max-width {

@@ -79,7 +79,7 @@ const assetVer = Date.now();
 
     <link
       rel="preload"
-      href="/assets/images/6a6b3faccd46c45ce795f994_hero-img.avif"
+      href="/assets/images/6a6a5aff998615e9c54b0be7_hero-bg.avif"
       as="image"
       type="image/avif"
       fetchpriority="high"
@@ -95,6 +95,25 @@ const assetVer = Date.now();
     <style is:inline>
       html.w-mod-js:not(.w-mod-ix3) :is(.why_img) { visibility: hidden !important; }
       html { scroll-behavior: auto; }
+      .section_hero {
+        position: relative;
+        overflow: hidden;
+        background-color: #f4f6fb;
+      }
+      .hero_bg-img {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 90% 50%;
+        pointer-events: none;
+      }
+      .section_hero > .max-width {
+        position: relative;
+        z-index: 1;
+      }
       .section_video {
         position: relative;
         overflow: hidden;
