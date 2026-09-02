@@ -1033,7 +1033,7 @@ textarea:focus:not(:focus-visible) {
   direction: rtl;
   color: var(--colors--white);
   text-decoration: none;
-  cursor: default;
+  cursor: pointer;
 }
 
 .footer_designer-wrapper {
