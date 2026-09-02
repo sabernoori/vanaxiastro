@@ -150,30 +150,51 @@
 
   function smoothScrollTo(y, options) {
     const opts = options || {};
+    let finished = false;
+    let tween = null;
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      if (opts.onComplete) opts.onComplete();
+    };
+
+    const cancel = () => {
+      finished = true;
+      if (tween) {
+        tween.kill();
+        tween = null;
+      }
+    };
+
     if (window.lenis && typeof window.lenis.scrollTo === 'function') {
       window.lenis.scrollTo(y, {
         duration: opts.duration != null ? opts.duration : 1.1,
         easing: opts.easing || ((t) => 1 - Math.pow(1 - t, 3)),
         immediate: !!opts.immediate,
-        onComplete: opts.onComplete
+        onComplete: finish
       });
-      return;
+      return cancel;
     }
 
     if (opts.immediate) {
       window.scrollTo(0, y);
-      if (opts.onComplete) opts.onComplete();
-      return;
+      finish();
+      return cancel;
     }
 
     const proxy = { y: getScrollY() };
-    gsap.to(proxy, {
+    tween = gsap.to(proxy, {
       duration: opts.duration != null ? opts.duration : 0.9,
       y: y,
       ease: 'power2.inOut',
+      overwrite: true,
       onUpdate: () => window.scrollTo(0, proxy.y),
-      onComplete: opts.onComplete
+      onComplete: finish,
+      onInterrupt: finish
     });
+
+    return cancel;
   }
   // ==========================================
   // END: Lenis Smooth Scroll + ScrollTrigger Sync
@@ -188,6 +209,10 @@
 
     let scrollTriggerInstance = null;
     let isProgrammaticScroll = false;
+    let programmaticGen = 0;
+    let programmaticTimer = null;
+    let cancelProgrammaticTween = null;
+    let userTakeoverBound = false;
 
     function waitForServicesDesktop(callback) {
       if (window.ServicesDesktop && window.ServicesDesktop.isReady()) {
@@ -216,6 +241,46 @@
       return { start: start, end: Math.max(start + 1, end) };
     }
 
+    function clearProgrammaticScroll() {
+      isProgrammaticScroll = false;
+      if (programmaticTimer) {
+        clearTimeout(programmaticTimer);
+        programmaticTimer = null;
+      }
+      if (cancelProgrammaticTween) {
+        const cancel = cancelProgrammaticTween;
+        cancelProgrammaticTween = null;
+        cancel();
+      }
+    }
+
+    function onUserTakeover() {
+      if (!isProgrammaticScroll) return;
+      programmaticGen += 1;
+      clearProgrammaticScroll();
+    }
+
+    function bindUserTakeover() {
+      if (userTakeoverBound) return;
+      userTakeoverBound = true;
+      const opts = { passive: true, capture: true };
+      window.addEventListener('wheel', onUserTakeover, opts);
+      window.addEventListener('touchmove', onUserTakeover, opts);
+      window.addEventListener('keydown', (event) => {
+        if (
+          event.key === 'ArrowUp' ||
+          event.key === 'ArrowDown' ||
+          event.key === 'PageUp' ||
+          event.key === 'PageDown' ||
+          event.key === 'Home' ||
+          event.key === 'End' ||
+          event.key === ' '
+        ) {
+          onUserTakeover();
+        }
+      }, opts);
+    }
+
     function scrollToIndex(index) {
       const api = window.ServicesDesktop;
       if (!api) return;
@@ -228,13 +293,30 @@
       const targetProgress = (clamped + 0.02) / count;
       const targetY = bounds.start + (bounds.end - bounds.start) * targetProgress;
 
+      programmaticGen += 1;
+      const gen = programmaticGen;
+      clearProgrammaticScroll();
       isProgrammaticScroll = true;
+      bindUserTakeover();
+
+      // Lenis replaces an in-flight scrollTo on wheel and never fires that
+      // call's onComplete — without a fallback the ignore-flag stays on forever.
+      const duration = 1.05;
+      programmaticTimer = setTimeout(() => {
+        if (gen !== programmaticGen) return;
+        cancelProgrammaticTween = null;
+        clearProgrammaticScroll();
+        ScrollTrigger.update();
+      }, Math.round(duration * 1000) + 250);
+
       api.setFromScroll(clamped, 0);
 
-      smoothScrollTo(targetY, {
-        duration: 1.05,
+      cancelProgrammaticTween = smoothScrollTo(targetY, {
+        duration: duration,
         onComplete: () => {
-          isProgrammaticScroll = false;
+          if (gen !== programmaticGen) return;
+          cancelProgrammaticTween = null;
+          clearProgrammaticScroll();
           ScrollTrigger.update();
         }
       });
@@ -274,6 +356,7 @@
       });
 
       api.registerScrollToIndex(scrollToIndex);
+      bindUserTakeover();
       ScrollTrigger.refresh();
     }
 
