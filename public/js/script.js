@@ -1431,12 +1431,18 @@
     video.preload = 'none';
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
     video.setAttribute('preload', 'none');
     video.setAttribute('aria-hidden', 'true');
     video.setAttribute('data-wf-ignore', 'true');
     video.removeAttribute('autoplay');
     video.removeAttribute('id');
   }
+
+  var hoverPlayback = {
+    card: null,
+    stop: null
+  };
 
   function loadAndPlay(video, src, reduceMotion) {
     if (video.getAttribute('src') !== src) {
@@ -1465,28 +1471,67 @@
     });
   }
 
+  function isFinePointerHover() {
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }
+
+  function stopHoverPlayback(card) {
+    if (!hoverPlayback.stop) return;
+    if (card && hoverPlayback.card !== card) return;
+    hoverPlayback.stop();
+    hoverPlayback.card = null;
+    hoverPlayback.stop = null;
+  }
+
   function bindHoverPlayback(card, video, src, reduceMotion) {
     if (card.getAttribute('data-story-hover-bound') === '1') return;
     card.setAttribute('data-story-hover-bound', '1');
 
-    const start = function() {
-      loadAndPlay(video, src, reduceMotion);
-    };
     const stop = function() {
       if (video.getAttribute('src')) {
         video.pause();
         video.removeAttribute('autoplay');
       }
+      if (hoverPlayback.card === card) {
+        hoverPlayback.card = null;
+        hoverPlayback.stop = null;
+      }
     };
 
-    // mouseenter/leave match CSS :hover, including sticky tap-hover on touch.
-    // pointerleave fires on finger-up and would cancel the video immediately.
+    const start = function() {
+      if (hoverPlayback.card && hoverPlayback.card !== card && hoverPlayback.stop) {
+        hoverPlayback.stop();
+      }
+      hoverPlayback.card = card;
+      hoverPlayback.stop = stop;
+      loadAndPlay(video, src, reduceMotion);
+    };
+
+    // pointerdown is a real user gesture (needed for iOS autoplay). mouseenter
+    // never fires on many touch browsers, and mouseleave fires on finger-up
+    // while CSS :hover stays — that paused the video behind the hover styles.
+    card.addEventListener('pointerdown', function(event) {
+      if (event.pointerType === 'touch' || event.pointerType === 'pen') {
+        start();
+      }
+    });
     card.addEventListener('mouseenter', start);
     card.addEventListener('focusin', start);
-    card.addEventListener('mouseleave', stop);
+    card.addEventListener('mouseleave', function() {
+      if (isFinePointerHover()) stop();
+    });
     card.addEventListener('focusout', function(event) {
       if (!card.contains(event.relatedTarget)) stop();
     });
+  }
+
+  if (!window.__storyHoverOutsideBound) {
+    window.__storyHoverOutsideBound = true;
+    document.addEventListener('pointerdown', function(event) {
+      if (!hoverPlayback.card) return;
+      if (hoverPlayback.card.contains(event.target)) return;
+      stopHoverPlayback();
+    }, true);
   }
 
   function mountStoryVideos() {
