@@ -3535,6 +3535,8 @@ a {
   padding-top: 5%;
   position: absolute;
   inset: 0% 0% auto auto;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 .footer_cloud2 {
@@ -3543,19 +3545,30 @@ a {
   pointer-events: none;
   width: 560px;
   max-width: 320px;
-  margin-top: -52px;
+  margin-top: -172px;
   position: absolute;
   inset: 0% auto auto 0%;
+  flex-shrink: 0;
+  object-fit: contain;
+
 }
 
+/* .footer_sky1,
+.footer_sky2 {
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+  flex-shrink: 0;
+} */
+
 .footer_sky1 {
-  z-index: 2;
-  opacity: .6;
-  width: auto;
   position: absolute;
   top: auto;
-  bottom: 39%;
   right: 50%;
+  bottom: 39%;
+  z-index: 2;
+  width: auto;
+  opacity: 0.6;
 }
 
 .footer_sky2 {
@@ -5122,8 +5135,8 @@ a {
   }
 
   .footer_cloud2 {
-    max-width: 150px;
-    margin-top: -34px;
+    max-width: 220px;
+    margin-top: -194px;
   }
 
   .footer_sky2 {
