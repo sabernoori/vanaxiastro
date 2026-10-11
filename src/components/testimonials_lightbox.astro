@@ -1,0 +1,200 @@
+---
+interface Props {
+  image?: string;
+  imageAlt?: string;
+}
+
+const { image = '', imageAlt = '' } = Astro.props;
+---
+
+<div class="lightbox" hidden>
+  <button type="button" class="lighthouse_close" aria-label="بستن">
+    <span class="icon-24 is-white" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
+        <path d="M17.25 17.25L6.75 6.75M17.25 6.75L6.75 17.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </span>
+  </button>
+  <div class="lightbox_content" tabindex="0">
+    <img class="lightbox_img" alt={imageAlt} src={image || undefined} />
+  </div>
+</div>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: hsla(0, 0%, 0%, 0.8);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s;
+  }
+
+  .lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .lighthouse_close {
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    min-width: 3rem;
+    min-height: 3rem;
+    margin: 0 0 0.5rem;
+    padding: 0;
+    border: 0;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .icon-24 {
+    display: flex;
+    width: 1.5rem;
+    height: 1.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .icon-24 svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .lightbox_content {
+    display: flex;
+    overflow: auto;
+    overscroll-behavior: contain;
+    width: min(50rem, calc(100vw - 2rem));
+    height: min(90vh, calc(100dvh - 5.5rem));
+    padding: 1rem;
+    flex-direction: column;
+    background-color: #fff;
+    transform: scale(0.82);
+    transform-origin: center center;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lightbox.is-open .lightbox_content {
+    transform: scale(1);
+  }
+
+  .lightbox_img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(0.94);
+    transform-origin: center top;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .lightbox.is-open .lightbox_img {
+    transform: scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox,
+    .lightbox_content,
+    .lightbox_img {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector('.lightbox');
+  if (root instanceof HTMLElement) {
+    const content = root.querySelector('.lightbox_content');
+    const image = root.querySelector('.lightbox_img');
+    const closeButton = root.querySelector('.lighthouse_close');
+    let previousFocus: HTMLElement | null = null;
+
+    const lockPage = () => {
+      document.documentElement.classList.add('testimonials-lightbox-open');
+      const lenis = Reflect.get(window, 'lenis');
+      if (lenis && typeof lenis.stop === 'function') lenis.stop();
+    };
+
+    const unlockPage = () => {
+      document.documentElement.classList.remove('testimonials-lightbox-open');
+      const lenis = Reflect.get(window, 'lenis');
+      if (lenis && typeof lenis.start === 'function') lenis.start();
+    };
+
+    const open = (src: string, alt: string) => {
+      if (image instanceof HTMLImageElement) {
+        image.src = src;
+        image.alt = alt;
+      }
+      if (content instanceof HTMLElement) content.scrollTop = 0;
+      previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      root.hidden = false;
+      root.setAttribute('role', 'dialog');
+      root.setAttribute('aria-modal', 'true');
+      root.setAttribute('aria-label', alt || 'بزرگنمایی سند');
+      lockPage();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => root.classList.add('is-open'));
+      });
+      if (closeButton instanceof HTMLElement) closeButton.focus();
+    };
+
+    const close = () => {
+      if (!root.classList.contains('is-open')) return;
+      root.classList.remove('is-open');
+      unlockPage();
+      window.setTimeout(() => {
+        if (!root.classList.contains('is-open')) root.hidden = true;
+      }, 420);
+      previousFocus?.focus();
+    };
+
+    window.addEventListener('testimonials-lightbox-open', (event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null;
+      const src = detail && typeof detail.src === 'string' ? detail.src : '';
+      const alt = detail && typeof detail.alt === 'string' ? detail.alt : '';
+      if (!src) return;
+      open(src, alt);
+    });
+
+    root.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target === root || target.closest('.lighthouse_close')) close();
+    });
+
+    root.addEventListener(
+      'wheel',
+      (event) => {
+        if (!root.classList.contains('is-open') || !(content instanceof HTMLElement)) return;
+        event.preventDefault();
+        content.scrollTop += event.deltaY;
+      },
+      { passive: false }
+    );
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && root.classList.contains('is-open')) {
+        event.preventDefault();
+        close();
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  html.testimonials-lightbox-open,
+  html.testimonials-lightbox-open body {
+    overflow: hidden;
+  }
+</style>

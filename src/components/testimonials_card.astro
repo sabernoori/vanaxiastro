@@ -1,0 +1,207 @@
+---
+interface Props {
+  image: string;
+  logo?: string;
+  title: string;
+  description: string;
+  imageAlt?: string;
+  logoAlt?: string;
+}
+
+const {
+  image,
+  logo = '',
+  title,
+  description,
+  imageAlt = title,
+  logoAlt = title
+} = Astro.props;
+---
+
+<article class="testimonials_card">
+  <button type="button" class="testimonials_top" aria-label={`بزرگنمایی سند ${title}`}>
+    <img class="testimonials_image" src={image} alt={imageAlt} width="326" height="443" loading="lazy" decoding="async" />
+    <span class="testimonials_overlay" aria-hidden="true"></span>
+    {logo && <img class="story_logo" src={logo} alt={logoAlt} loading="lazy" decoding="async" />}
+    <span class="testimonial_zoom-txt">بزرگنمایی سند</span>
+  </button>
+  <div class="testimonials_content">
+    <h3 class="testimonials_heading text-large">{title}</h3>
+    <p class="text-small opacity-60">{description}</p>
+  </div>
+</article>
+
+<style>
+  .testimonials_card {
+    display: flex;
+    max-width: 20.375rem;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1rem;
+  }
+
+  .testimonials_top {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 326 / 443;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: zoom-in;
+  }
+
+  .testimonials_image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .testimonials_overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: #ebf3fe;
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .story_logo {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    width: auto;
+    max-width: 58%;
+    max-height: 4.5rem;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    filter: url(#testimonial-logo-color);
+    pointer-events: none;
+  }
+
+  .testimonial_zoom-txt {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    bottom: 0.5rem;
+    left: 0;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    transform: translate(0, 150%);
+    pointer-events: none;
+  }
+
+  .testimonials_card .testimonials_image,
+  .testimonials_card .testimonials_overlay,
+  .testimonials_card .testimonial_zoom-txt,
+  .testimonials_card .story_logo {
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transition-duration: 0.7s;
+    will-change: transform, opacity;
+  }
+
+  .testimonials_card .testimonials_image {
+    transform: scale(1);
+    transform-origin: center center;
+    transition-property: transform;
+    transition-duration: 0.95s;
+  }
+
+  .testimonials_card .testimonials_overlay {
+    transition-property: background-color, opacity;
+    transition-duration: 0.55s;
+  }
+
+  .testimonials_card .testimonial_zoom-txt {
+    transition-property: transform;
+    transition-duration: 0.8s;
+    transition-delay: 0.06s;
+  }
+
+  .testimonials_card .story_logo {
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+  }
+
+  .testimonials_card:hover .testimonials_image,
+  .testimonials_card:focus-within .testimonials_image {
+    transform: scale(1.08);
+  }
+
+  .testimonials_card:hover .testimonials_overlay,
+  .testimonials_card:focus-within .testimonials_overlay {
+    background-color: #0000;
+    background-image: linear-gradient(180deg, #000b2200 63%, var(--text-colors));
+    opacity: 1;
+  }
+
+  .testimonials_card:hover .testimonial_zoom-txt,
+  .testimonials_card:focus-within .testimonial_zoom-txt {
+    transform: translateY(0%);
+  }
+
+  .testimonials_card:hover .story_logo,
+  .testimonials_card:focus-within .story_logo {
+    opacity: 0;
+  }
+
+  .testimonials_content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  .testimonials_heading,
+  .testimonials_content p {
+    width: 100%;
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials_card .testimonials_image,
+    .testimonials_card .testimonials_overlay,
+    .testimonials_card .testimonial_zoom-txt,
+    .testimonials_card .story_logo {
+      transition-duration: 0.01ms;
+      transition-delay: 0s;
+    }
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll('.testimonials_top');
+
+  cards.forEach((button) => {
+    button.addEventListener('click', () => {
+      const image = button.querySelector('.testimonials_image');
+      if (!(image instanceof HTMLImageElement)) return;
+
+      window.dispatchEvent(
+        new CustomEvent('testimonials-lightbox-open', {
+          detail: {
+            src: image.currentSrc || image.src,
+            alt: image.alt
+          }
+        })
+      );
+    });
+  });
+</script>

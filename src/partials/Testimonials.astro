@@ -1,0 +1,399 @@
+---
+import TestimonialsCard from '../components/testimonials_card.astro';
+import TestimonialsLightbox from '../components/testimonials_lightbox.astro';
+
+const letters = [
+  {
+    image: '/assets/images/testimonials/20250528_180311.jpg',
+    title: 'پادیاب تجهیز',
+    description: 'رضایت از امنیت سفر، پاکیزگی خودروها، وقت‌شناسی رانندگان و پشتیبانی ونکسی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180415.jpg',
+    logo: '/assets/images/logos/05%20-%20electronic%20pishrafte.avif',
+    title: 'الکترونیک پزشکی',
+    description: 'قدردانی از خدمات چندساله، عملکرد سامانه و همراهی تیم پشتیبانی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_175042.jpg',
+    title: 'سازه‌های صنعتی آذران',
+    description: 'اعلام رضایت از همکاری و خدمات ونکسی در طول دو سال'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_175317.jpg',
+    title: 'دانیال کیا',
+    description: 'تقدیر از تعهد، پاسخ‌گویی به‌موقع و همکاری مستمر'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_175501.jpg',
+    logo: '/assets/images/logos/20.avif',
+    title: 'ترانس پست پارس',
+    description: 'قدردانی از سال‌ها خدمت‌رسانی و توسعه خدمات حمل‌ونقل شهری'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_175608.jpg',
+    title: 'کاشی سمنان',
+    description: 'تقدیر از یک دهه همکاری و مساعدت همکاران ونکسی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_175740.jpg',
+    title: 'تولیدی فیلتر کاج',
+    description: 'قدردانی از خدمات ونکسی و تلاش برای گسترش حمل‌ونقل شهری'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180008.jpg',
+    title: 'Ebewe Pharma',
+    description: 'اعلام رضایت از همکاری و کیفیت خدمت‌رسانی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180147.jpg',
+    title: 'Advance Medtronics',
+    description: 'سپاس از خدمات و تلاش مستمر مجموعه ونکسی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180546.jpg',
+    logo: '/assets/images/logos/17.avif',
+    title: 'نویاویژن',
+    description: 'قدردانی از هفت سال همکاری ارزنده و مستمر'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180702.jpg',
+    title: 'TCMFG',
+    description: 'اعلام رضایت از پاسخ‌گویی و پشتیبانی در طول همکاری'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_180844.jpg',
+    title: 'صبا نفت',
+    description: 'قدردانی از هشت سال همکاری و خدمات پشتیبانی'
+  },
+  {
+    image: '/assets/images/testimonials/20250528_174901.jpg',
+    title: 'انجمن ام‌اس ایران',
+    description: 'قدردانی از همراهی اجتماعی ونکسی در حمایت از بیماران'
+  }
+];
+---
+
+<svg class="testimonials_logo-filter" width="0" height="0" aria-hidden="true" focusable="false">
+  <filter id="testimonial-logo-color" color-interpolation-filters="sRGB">
+    <feFlood result="flood" style="flood-color: var(--colors--blue-darkest, #000b22)"></feFlood>
+    <feComposite in="flood" in2="SourceAlpha" operator="in"></feComposite>
+  </filter>
+</svg>
+<section id="testimonials" class="section_testimonials" aria-labelledby="testimonials-title">
+  <div class="testimonials_heading-wrapper">
+    <h2 id="testimonials-title" class="stories_heading">آنچه مشتریان درباره ونکسی نوشته‌اند</h2>
+    <p class="opacity-50">سال‌ها همکاری با سازمان‌های ایرانی، در نامه‌هایی ثبت شده که کیفیت خدمات، پاسخ‌گویی و همراهی تیم ونکسی را روایت می‌کنند.</p>
+  </div>
+
+  <div class="testimonials-track" data-testimonials-track tabindex="0" aria-label="تقدیرنامه مشتریان">
+    {letters.map((letter) => (
+      <TestimonialsCard
+        image={letter.image}
+        logo={letter.logo}
+        title={letter.title}
+        description={letter.description}
+      />
+    ))}
+  </div>
+
+  <div class="testimonials_scroll">
+    <div class="arrows_group">
+      <button type="button" class="arrow_item" data-testimonials-next aria-label="تقدیرنامه بعدی">
+        <span class="arrow_icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
+            <path d="M9.57141 18.8201C9.38141 18.8201 9.19141 18.7501 9.04141 18.6001L2.97141 12.5301C2.68141 12.2401 2.68141 11.7601 2.97141 11.4701L9.04141 5.40012C9.33141 5.11012 9.81141 5.11012 10.1014 5.40012C10.3914 5.69012 10.3914 6.17012 10.1014 6.46012L4.56141 12.0001L10.1014 17.5401C10.3914 17.8301 10.3914 18.3101 10.1014 18.6001C9.96141 18.7501 9.76141 18.8201 9.57141 18.8201Z" fill="currentColor"></path>
+            <path d="M20.5019 12.75H3.67188C3.26188 12.75 2.92188 12.41 2.92188 12C2.92188 11.59 3.26188 11.25 3.67188 11.25H20.5019C20.9119 11.25 21.2519 11.59 21.2519 12C21.2519 12.41 20.9119 12.75 20.5019 12.75Z" fill="currentColor"></path>
+          </svg>
+        </span>
+      </button>
+      <button type="button" class="arrow_item" data-testimonials-prev aria-label="تقدیرنامه قبلی">
+        <span class="arrow_icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
+            <path d="M14.4311 18.8201C14.2411 18.8201 14.0511 18.7501 13.9011 18.6001C13.6111 18.3101 13.6111 17.8301 13.9011 17.5401L19.4411 12.0001L13.9011 6.46012C13.6111 6.17012 13.6111 5.69012 13.9011 5.40012C14.1911 5.11012 14.6711 5.11012 14.9611 5.40012L21.0311 11.4701C21.3211 11.7601 21.3211 12.2401 21.0311 12.5301L14.9611 18.6001C14.8111 18.7501 14.6211 18.8201 14.4311 18.8201Z" fill="currentColor"></path>
+            <path d="M20.33 12.75H3.5C3.09 12.75 2.75 12.41 2.75 12C2.75 11.59 3.09 11.25 3.5 11.25H20.33C20.74 11.25 21.08 11.59 21.08 12C21.08 12.41 20.74 12.75 20.33 12.75Z" fill="currentColor"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+    <div class="scrollbar" data-testimonials-scrollbar>
+      <div class="scrollbar_back"></div>
+      <div class="scrollbar_bar" data-testimonials-thumb></div>
+    </div>
+  </div>
+
+  <TestimonialsLightbox />
+</section>
+
+<style>
+  .testimonials_logo-filter {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .section_testimonials {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4rem;
+    padding: 6.5rem 0;
+    background-color: #ebf3fe;
+    overflow: hidden;
+  }
+
+  .testimonials_heading-wrapper {
+    display: flex;
+    width: min(100% - 2rem, 40rem);
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .testimonials_heading-wrapper :global(.stories_heading),
+  .testimonials_heading-wrapper p {
+    margin: 0;
+  }
+
+  .testimonials_heading-wrapper p {
+    direction: rtl;
+  }
+
+  .testimonials-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: clamp(17rem, 28vw, 22rem);
+    gap: 1.5rem;
+    direction: rtl;
+    width: min(100% - 2rem, 100rem);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+
+  .testimonials-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonials-track > :global(.testimonials_card) {
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .testimonials_scroll {
+    display: flex;
+    width: min(100% - 2rem, 100rem);
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+    direction: ltr;
+  }
+
+  .arrows_group {
+    display: flex;
+    flex: none;
+    direction: ltr;
+    gap: 1rem;
+  }
+
+  .arrow_item {
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    border: 1px solid #e6eaf3;
+    border-radius: 3rem;
+    background: transparent;
+    color: #000b22;
+    cursor: pointer;
+  }
+
+  .arrow_item:hover,
+  .arrow_item:focus-visible {
+    background: #000b22;
+    color: #fff;
+  }
+
+  .arrow_item:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .arrow_icon {
+    display: flex;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .arrow_icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .scrollbar {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    max-width: 50rem;
+    height: 6px;
+    touch-action: none;
+  }
+
+  .scrollbar_back,
+  .scrollbar_bar {
+    position: absolute;
+    top: 0;
+    height: 6px;
+    border-radius: 6px;
+  }
+
+  .scrollbar_back {
+    inset-inline: 0;
+    background-color: #e6eaf3;
+  }
+
+  .scrollbar_bar {
+    right: 0;
+    width: 35%;
+    background-color: #0a3c91;
+    cursor: grab;
+  }
+
+  .scrollbar_bar.is-dragging {
+    cursor: grabbing;
+  }
+
+  @media screen and (max-width: 767px) {
+    .testimonials_scroll {
+      flex-direction: column-reverse;
+      gap: 2rem;
+    }
+
+    .scrollbar {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testimonials-track {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector('.section_testimonials');
+  const track = root?.querySelector('.testimonials-track');
+  const scrollbar = root?.querySelector('.scrollbar');
+  const thumb = root?.querySelector('.scrollbar_bar');
+  const nextButton = root?.querySelector('[data-testimonials-next]');
+  const prevButton = root?.querySelector('[data-testimonials-prev]');
+
+  if (
+    root instanceof HTMLElement &&
+    track instanceof HTMLElement &&
+    scrollbar instanceof HTMLElement &&
+    thumb instanceof HTMLElement &&
+    nextButton instanceof HTMLButtonElement &&
+    prevButton instanceof HTMLButtonElement
+  ) {
+    const maxScroll = () => Math.max(0, track.scrollWidth - track.clientWidth);
+
+    const card = track.querySelector('.testimonials_card');
+    const beforeX = card instanceof HTMLElement ? card.getBoundingClientRect().x : 0;
+    track.style.scrollSnapType = 'none';
+    track.scrollBy({ left: -1, behavior: 'instant' });
+    const movedRight = card instanceof HTMLElement && card.getBoundingClientRect().x > beforeX + 0.5;
+    track.scrollLeft = 0;
+    track.style.scrollSnapType = '';
+    const nextSign = movedRight ? -1 : 1;
+
+    const scrollPos = () => (nextSign < 0 ? Math.abs(Math.min(0, track.scrollLeft)) : Math.max(0, track.scrollLeft));
+
+    const setScrollPos = (position) => {
+      const next = Math.min(maxScroll(), Math.max(0, position));
+      track.scrollLeft = nextSign < 0 ? -next : next;
+    };
+
+    const stepSize = () => {
+      const item = track.querySelector('.testimonials_card');
+      const styles = getComputedStyle(track);
+      const gap = parseFloat(styles.columnGap || styles.gap) || 0;
+      const width = item instanceof HTMLElement ? item.getBoundingClientRect().width : track.clientWidth * 0.8;
+      return width + gap;
+    };
+
+    const paint = () => {
+      const max = maxScroll();
+      const pos = scrollPos();
+      const visible = max <= 0 ? 1 : track.clientWidth / track.scrollWidth;
+      const width = Math.max(visible, 0.12) * scrollbar.clientWidth;
+      const travel = Math.max(0, scrollbar.clientWidth - width);
+      thumb.style.width = `${width}px`;
+      thumb.style.right = `${max <= 0 ? 0 : (pos / max) * travel}px`;
+      prevButton.disabled = pos <= 1;
+      nextButton.disabled = pos >= max - 1;
+    };
+
+    const move = (direction) => {
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      track.scrollBy({ left: nextSign * direction * stepSize(), behavior });
+    };
+
+    nextButton.addEventListener('click', () => move(1));
+    prevButton.addEventListener('click', () => move(-1));
+
+    let dragOrigin = 0;
+    let dragScroll = 0;
+
+    const pointerProgress = (clientX) => {
+      const rect = scrollbar.getBoundingClientRect();
+      const fromStart = rect.right - clientX;
+      return Math.min(1, Math.max(0, fromStart / rect.width));
+    };
+
+    scrollbar.addEventListener('pointerdown', (event) => {
+      if (!(event.target instanceof Element)) return;
+      track.style.scrollSnapType = 'none';
+      track.style.scrollBehavior = 'auto';
+      if (event.target.closest('.scrollbar_bar')) {
+        thumb.classList.add('is-dragging');
+        dragOrigin = event.clientX;
+        dragScroll = scrollPos();
+        thumb.setPointerCapture(event.pointerId);
+        return;
+      }
+      setScrollPos(pointerProgress(event.clientX) * maxScroll());
+      paint();
+    });
+
+    thumb.addEventListener('pointermove', (event) => {
+      if (!thumb.classList.contains('is-dragging')) return;
+      const rect = scrollbar.getBoundingClientRect();
+      const delta = dragOrigin - event.clientX;
+      const travel = Math.max(1, rect.width - thumb.getBoundingClientRect().width);
+      setScrollPos(dragScroll + (delta / travel) * maxScroll());
+      paint();
+    });
+
+    const endDrag = () => {
+      thumb.classList.remove('is-dragging');
+      track.style.scrollSnapType = '';
+      track.style.scrollBehavior = '';
+    };
+
+    thumb.addEventListener('pointerup', endDrag);
+    thumb.addEventListener('pointercancel', endDrag);
+    track.addEventListener('scroll', paint, { passive: true });
+    window.addEventListener('resize', paint);
+    paint();
+  }
+</script>

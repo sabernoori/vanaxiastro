@@ -1182,22 +1182,19 @@ textarea:focus:not(:focus-visible) {
   z-index: 1;
 }
 
+.section_video {
+  aspect-ratio: 1280 / 548;
+  background-image: none;
+  background-color: #061a2a;
+  overflow: hidden;
+}
+
 .section_video-media {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-}
-
-@media screen and (min-width: 768px) {
-  .section_video {
-    aspect-ratio: 1440 / 724 !important;
-  }
-
-  .section_video-media {
-    object-position: 0% 50%;
-  }
 }
 
 .designer_img {

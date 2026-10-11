@@ -95,12 +95,6 @@ const assetVer = Date.now();
     <style is:inline>
       html.w-mod-js:not(.w-mod-ix3) :is(.why_img) { visibility: hidden !important; }
       html { scroll-behavior: auto; }
-      :root { --video-ar: 2 / 3; }
-      @media screen and (min-width: 768px) {
-        :root { --video-ar: 1440 / 724; }
-        .section_video { aspect-ratio: 1440 / 724 !important; }
-        .section_video-media { object-position: 0% 50%; }
-      }
       .section_hero {
         position: relative;
         overflow: hidden;
@@ -121,11 +115,10 @@ const assetVer = Date.now();
         z-index: 1;
       }
       .section_video {
-        position: relative;
+        aspect-ratio: 1280 / 548;
+        background-image: none;
+        background-color: #061a2a;
         overflow: hidden;
-        aspect-ratio: var(--video-ar, 2 / 3);
-        width: 100%;
-        background-color: #000b22;
       }
       .section_video-media {
         display: block;
@@ -133,9 +126,6 @@ const assetVer = Date.now();
         height: 100%;
         object-fit: cover;
         object-position: center;
-      }
-      @media screen and (min-width: 768px) {
-        .section_video-media { object-position: 0% 50%; }
       }
       html.w-mod-js:not(.services-cover-ready) .section_services.is-services-cover .heading-section-scale {
         transform: scale(3);
