@@ -1,0 +1,97 @@
+---
+interface Props {
+  image?: string;
+  imageAlt?: string;
+  date?: string;
+  category?: string;
+  title?: string;
+  excerpt?: string;
+  href?: string;
+}
+
+const {
+  image = '',
+  imageAlt = '',
+  date = '۱۴۰۵/۶/۲۱',
+  category = 'خبر',
+  title = 'از سراسر ایران به بابلسر؛ خدمات حمل‌ونقل ونکسی برای رویداد سازمانی با حضور بیش از ۷۰ پزشک',
+  excerpt = 'ونکسی با ارائه خدمات حمل‌ونقل به شرکت‌های دارویی، در برگزاری رویدادی با حضور بیش از 7۰ پزشک در بابلسر مشارکت داشت. حضور خودروها از سراسر کشور، هماهنگی سفرها و اقدام فوری برای پاسخ‌گویی به نیازهای اجرایی، محور خدمات ونکسی در این رویداد بود.',
+  href = ''
+} = Astro.props;
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class="blog_card" href={href || undefined}>
+  <div class="blog_image-frame">
+    <img class="blog_image" src={image || undefined} alt={imageAlt} />
+  </div>
+  <div class="blog_card-content">
+    <div class="blog_card-eyebrow">
+      <div class="text-small opacity-60">{date}</div>
+      <div class="text-small opacity-60">{category}</div>
+    </div>
+    <h3 class="text-large">{title}</h3>
+    <p class="opacity-65">{excerpt}</p>
+  </div>
+</Tag>
+
+<style>
+  .blog_card {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .blog_image-frame {
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 72 / 45;
+    background-color: var(--colors--white, white);
+  }
+
+  .blog_image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .blog_card:hover .blog_image,
+  .blog_card:focus-visible .blog_image {
+    transform: scale(1.05);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blog_image {
+      transition: none;
+    }
+  }
+
+  .blog_card-content {
+    display: flex;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    background-color: var(--colors--white, white);
+  }
+
+  .blog_card-eyebrow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .opacity-65 {
+    opacity: 0.65;
+  }
+</style>

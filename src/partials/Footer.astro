@@ -1,5 +1,41 @@
 ---
 import OptimizedImg from '../components/OptimizedImg.astro';
+import FooterContact from '../components/footer_contact.astro';
+import type { FooterContactItem } from '../components/footer_contact.astro';
+
+const seoulMap = 'https://www.google.com/maps/search/?api=1&query=35.766715,51.396211';
+const sabaMap = 'https://www.google.com/maps/search/?api=1&query=35.75906,51.39612';
+
+const footerContacts: FooterContactItem[] = [
+  {
+    label: 'تهران، ونک، خیابان سئول، پلاک ۱۸',
+    href: seoulMap,
+    ariaLabel: 'آدرس ونک، خیابان سئول',
+    icon: 'pin',
+    compactOrder: 3,
+  },
+  {
+    label: 'تهران، ونک، شیخ بهائی، صائب تبریزی، برج صبا',
+    href: sabaMap,
+    ariaLabel: 'آدرس برج صبا',
+    icon: 'pin',
+    compactOrder: 4,
+  },
+  {
+    label: 'admin@vanaxi.ir',
+    href: 'mailto:admin@vanaxi.ir',
+    ariaLabel: 'ایمیل ونکسی',
+    icon: 'mail',
+    compactOrder: 2,
+  },
+  {
+    label: '۰۲۱۸۸۶۱۷۱۸۱',
+    href: 'tel:+982188617181',
+    ariaLabel: 'تماس با ونکسی',
+    icon: 'phone',
+    compactOrder: 1,
+  },
+];
 ---
 
 <footer aria-label="پاورقی سایت" class="footer"><OptimizedImg sizes="100vw"
@@ -36,7 +72,8 @@ import OptimizedImg from '../components/OptimizedImg.astro';
                     <div>۰۲۱۸۸۶۱۷۱۸۱</div>
                 </a></div>
         </div>
-        <div class="footer_box">
+        <div class="footer_box-new">
+        <div class="footer_box-up">
             <div class="footer_box_about"><OptimizedImg loading="lazy"
                     src="/assets/images/6a6e015d730ba56542dcdc2d_vanaxi-footer-logo.svg" alt="ونکسی"
                     class="footer_logo-img-desk" width="209" height="63" />
@@ -145,6 +182,10 @@ import OptimizedImg from '../components/OptimizedImg.astro';
                 </div>
                 <div class="footer_copyright">کلیه حقوق مربوط به وبسایت ونکسی برای این شرکت محفوظ است.</div>
             </div>
+        </div>
+        <div class="footer_box-bottom">
+            <FooterContact items={footerContacts} />
+        </div>
         </div>
     </div>
     <div class="footer_img-wrapper"><img sizes="(max-width: 2012px) 100vw, 2012px"

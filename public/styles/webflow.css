@@ -3353,12 +3353,50 @@ a {
   text-wrap: pretty;
 }
 
-.footer_box {
+.footer_box-new {
+  z-index: 5;
+  background-color: var(--colors--white);
+  flex-flow: column;
+  display: flex;
+  position: relative;
+}
+
+.footer_box-up {
   z-index: 5;
   background-color: var(--colors--white);
   flex-flow: row-reverse;
   display: flex;
   position: relative;
+}
+
+.footer_box-bottom {
+  display: flex;
+  width: 100%;
+  height: auto;
+  min-height: 6rem;
+  padding: 1rem 5rem;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  grid-column-gap: 1.5rem;
+  grid-row-gap: 1.5rem;
+  border-top: 1px solid var(--colors--border);
+}
+
+.footer_contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
+}
+
+.footer_contact-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
 }
 
 .footer_box_about {
@@ -4381,9 +4419,23 @@ a {
     opacity: .2;
   }
 
-  .footer_box {
+  .footer_box-new,
+  .footer_box-up {
     flex-flow: column;
     width: 100%;
+  }
+
+  .footer_box-bottom {
+    display: grid;
+    justify-items: end;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .footer_contact {
+    white-space: nowrap;
+    order: var(--footer-contact-order, 0);
   }
 
   .footer_box_about {
@@ -4770,6 +4822,23 @@ a {
 }
 
 @media screen and (max-width: 767px) {
+  .footer_box-bottom {
+    display: flex;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+  }
+
+  .footer_contact {
+    justify-content: flex-end;
+    align-items: center;
+    white-space: nowrap;
+  }
+
   .nav_button, .nav_phone, .nav_account-desk, .nav_logo-link-right {
     display: none;
   }
@@ -4959,6 +5028,19 @@ a {
 }
 
 @media screen and (max-width: 479px) {
+  .footer_box-bottom {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+
+  .footer_contact {
+    justify-content: flex-end;
+    align-items: flex-start;
+    white-space: normal;
+  }
+
   .section_hero {
     padding-top: 9rem;
     padding-bottom: 4rem;
