@@ -1,12 +1,63 @@
 ---
 import OptimizedImg from '../components/OptimizedImg.astro';
-import FooterContact from '../components/footer_contact.astro';
-import type { FooterContactItem } from '../components/footer_contact.astro';
 
 const seoulMap = 'https://www.google.com/maps/search/?api=1&query=35.766715,51.396211';
 const sabaMap = 'https://www.google.com/maps/search/?api=1&query=35.75906,51.39612';
 
-const footerContacts: FooterContactItem[] = [
+const cta = {
+  heading: 'هم اکنون جهت دریافت مشاوره رایگان اقدام کنید',
+  text: 'کارشناسان ما در اسرع وقت با شما تماس خواهند گرفت.',
+  consult: { href: '#process', label: 'درخواست مشاوره رایگان' },
+  phone: { href: 'tel:+982188617181', label: '۰۲۱۸۸۶۱۷۱۸۱' },
+};
+
+const about =
+  'شـرکت تشریفاتی ونکسی با بیش از ۵۰ سال سابقه در حمل و نقل پرسنل در سفرهـای درون شهـری و بـرون شـهری در سرتاسر ایران است. ونکسی با همه تجارب گذشته تا به امروز با تغییرات سبک زندگی مردم خود را هر روز بروز کرده و با توجه به نیاز های امروز خدمات خود را ارائه میدهد.';
+
+const socials = [
+  { href: 'https://www.instagram.com/vanaxi', label: 'اینستاگرام ونکسی' },
+  { href: 'https://www.linkedin.com/company/vanaxi', label: 'لینکدین ونکسی' },
+  { href: 'https://t.me/vanaxi', label: 'تلگرام ونکسی' },
+  { href: 'https://x.com/vanaxi', label: 'اکس ونکسی' },
+  { href: 'https://www.aparat.com/vanaxi', label: 'آپارات ونکسی' },
+];
+
+const linksTitle = 'لینک ها';
+const linkColumns = [
+  [
+    { href: '#services', label: 'پلن ها' },
+    { href: 'https://vanaxi.ir/Account/Login', label: 'پنل رانندگان' },
+    { href: 'https://vanaxi.ir/Account/Login', label: 'پنل سازمان ها' },
+    { href: '#organizational-transport', label: 'مقالات' },
+    { href: '#why', label: 'درباره ونکسی' },
+    { href: '#process', label: 'تماس با ما' },
+    { href: '#process', label: 'جذب راننده', highlight: true },
+  ],
+  [
+    { href: '#services', label: 'خدمات' },
+    { href: '#services', label: 'سفر در اختیار' },
+    { href: '#services', label: 'سفر بین شهری' },
+    { href: '#services', label: 'ترانسفر فرودگاهی و مرز' },
+    { href: '#services', label: 'سرویس پرسنل و مدارس' },
+    { href: '#stories', label: 'تجربه مشتریان' },
+    { href: '#process', label: 'رانندگان ونکسی' },
+  ],
+];
+
+const signsTitle = 'مجوزها و نماد ها';
+const signs = [
+  '/assets/images/6a6e0b67c6fa1a189ca7a72d_images-1.avif',
+  '/assets/images/6a6e0d3f8fc171e8f29005ec_OIP-1-1.avif',
+  '/assets/images/6a6e0d3fc104ee503dae21de_OIP-1.avif',
+];
+const copyright = 'کلیه حقوق مربوط به وبسایت ونکسی برای این شرکت محفوظ است.';
+
+const designer = {
+  href: 'https://dizayn.ir',
+  label: 'برندینگ و وبسایت:',
+};
+
+const footerContacts = [
   {
     label: 'تهران، ونک، خیابان سئول، پلاک ۱۸',
     href: seoulMap,
@@ -52,9 +103,9 @@ const footerContacts: FooterContactItem[] = [
         alt="" src="/assets/images/6a6e16ad1ed74505db923bfb_clouds.avif" loading="lazy" class="footer_cloud2" />
     <div class="footer_wrapper">
         <div class="footer_cta">
-            <h2 class="footer_cta_heading">هم اکنون جهت دریافت مشاوره رایگان اقدام کنید</h2>
-            <p class="footer_cta_text">کارشناسان ما در اسرع وقت با شما تماس خواهند گرفت.</p>
-            <div class="footer_cta_btn-group"><a href="#process" class="button w-button">درخواست مشاوره رایگان</a><a href="tel:+982188617181"
+            <h2 class="footer_cta_heading">{cta.heading}</h2>
+            <p class="footer_cta_text">{cta.text}</p>
+            <div class="footer_cta_btn-group"><a href={cta.consult.href} class="button w-button">{cta.consult.label}</a><a href={cta.phone.href}
                     class="button is-white w-inline-block">
                     <div class="icon-24"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24"
                             fill="none">
@@ -69,7 +120,7 @@ const footerContacts: FooterContactItem[] = [
                                 fill="currentColor"></path>
                         </svg></div>
                     <div class="btn-line"></div>
-                    <div>۰۲۱۸۸۶۱۷۱۸۱</div>
+                    <div>{cta.phone.label}</div>
                 </a></div>
         </div>
         <div class="footer_box-new">
@@ -80,12 +131,9 @@ const footerContacts: FooterContactItem[] = [
                 <OptimizedImg loading="lazy"
                     src="/assets/images/6a6e23987dfa6f1e08d33d60_vanaxi-footer-logo-mob.svg" alt="ونکسی"
                     class="footer_logo-img-mob" width="130" height="102" />
-                <p data-kashida class="text-small opacity-50">شـرکت تشریفاتی ونکسی با بیش از ۵۰ سال سابقه در حمل و نقل پرسنل در
-                    سفرهـای درون شهـری و بـرون شـهری در سرتاسر ایران است. ونکسی با همه تجارب گذشته تا به امروز با
-                    تغییرات سبک زندگی مردم خود را هر روز بروز کرده و با توجه به نیاز های امروز خدمات خود را ارائه میدهد.
-                </p>
-                <div class="footer_social-list"><a aria-label="اینستاگرام ونکسی" href="https://www.instagram.com/vanaxi" target="_blank" rel="noopener noreferrer"
-                        class="footer_social-item w-inline-block"><span class="visually-hidden">اینستاگرام ونکسی</span>
+                <p data-kashida class="text-small opacity-50">{about}</p>
+                <div class="footer_social-list"><a aria-label={socials[0].label} href={socials[0].href} target="_blank" rel="noopener noreferrer"
+                        class="footer_social-item w-inline-block"><span class="visually-hidden">{socials[0].label}</span>
                         <div class="icon-24 is-gray"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
@@ -98,28 +146,28 @@ const footerContacts: FooterContactItem[] = [
                                     d="M12 8.49984C12.6923 8.49984 13.369 8.70512 13.9446 9.08973C14.5202 9.47433 14.9688 10.021 15.2337 10.6605C15.4986 11.3001 15.568 12.0039 15.4329 12.6828C15.2978 13.3618 14.9645 13.9855 14.475 14.475C13.9855 14.9645 13.3618 15.2978 12.6828 15.4329C12.0039 15.568 11.3001 15.4986 10.6605 15.2337C10.021 14.9688 9.47433 14.5202 9.08973 13.9446C8.70513 13.369 8.49985 12.6923 8.49985 12C8.50084 11.072 8.86992 10.1823 9.52611 9.52611C10.1823 8.86992 11.072 8.50084 12 8.49984ZM12 6.75C10.9616 6.75 9.94662 7.05791 9.08326 7.63478C8.2199 8.21166 7.54699 9.0316 7.14963 9.99091C6.75227 10.9502 6.64831 12.0058 6.85088 13.0242C7.05345 14.0426 7.55347 14.9781 8.28769 15.7123C9.02192 16.4465 9.95738 16.9466 10.9758 17.1491C11.9942 17.3517 13.0498 17.2477 14.0091 16.8504C14.9684 16.453 15.7883 15.7801 16.3652 14.9167C16.9421 14.0534 17.25 13.0384 17.25 12C17.25 10.6076 16.6969 9.27226 15.7123 8.28769C14.7277 7.30312 13.3924 6.75 12 6.75Z"
                                     fill="currentColor"></path>
                             </svg></div>
-                    </a><a aria-label="لینکدین ونکسی" href="https://www.linkedin.com/company/vanaxi" target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">لینکدین ونکسی</span>
+                    </a><a aria-label={socials[1].label} href={socials[1].href} target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">{socials[1].label}</span>
                         <div class="icon-24 is-gray"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M20.8205 1.5H3.29438C2.33672 1.5 1.5 2.18906 1.5 3.13547V20.7005C1.5 21.652 2.33672 22.5 3.29438 22.5H20.8153C21.7781 22.5 22.5 21.6464 22.5 20.7005V3.13547C22.5056 2.18906 21.7781 1.5 20.8205 1.5ZM8.00953 19.0045H5.00109V9.65063H8.00953V19.0045ZM6.60938 8.22844H6.58781C5.625 8.22844 5.00156 7.51172 5.00156 6.61453C5.00156 5.70094 5.64141 5.00109 6.62578 5.00109C7.61016 5.00109 8.2125 5.69578 8.23406 6.61453C8.23359 7.51172 7.61016 8.22844 6.60938 8.22844ZM19.0045 19.0045H15.9961V13.89C15.9961 12.6647 15.5583 11.8275 14.4698 11.8275C13.6383 11.8275 13.1461 12.39 12.9272 12.938C12.8452 13.1348 12.8231 13.403 12.8231 13.6767V19.0045H9.81469V9.65063H12.8231V10.9523C13.2609 10.3289 13.9448 9.43172 15.5363 9.43172C17.5111 9.43172 19.005 10.7334 19.005 13.5398L19.0045 19.0045Z"
                                     fill="currentColor"></path>
                             </svg></div>
-                    </a><a aria-label="تلگرام ونکسی" href="https://t.me/vanaxi" target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">تلگرام ونکسی</span>
+                    </a><a aria-label={socials[2].label} href={socials[2].href} target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">{socials[2].label}</span>
                         <div class="icon-24 is-gray"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M22.1716 1.83039C22.0182 1.67706 21.8238 1.57132 21.6118 1.52591C21.3997 1.4805 21.179 1.49736 20.9763 1.57445L2.2249 8.67179H2.22115C2.00494 8.75495 1.81968 8.90282 1.69066 9.09521C1.56163 9.2876 1.49515 9.51512 1.50028 9.74671C1.5054 9.9783 1.5819 10.2027 1.71931 10.3891C1.85672 10.5756 2.04835 10.7152 2.26802 10.7887L2.28724 10.7948L8.72318 13.543C8.84871 13.5812 8.98204 13.5857 9.10986 13.5561C9.23768 13.5266 9.35552 13.4641 9.45162 13.3748L19.781 3.74992C19.8118 3.71914 19.8483 3.69473 19.8885 3.67807C19.9287 3.66141 19.9718 3.65284 20.0154 3.65284C20.0589 3.65284 20.102 3.66141 20.1422 3.67807C20.1824 3.69473 20.219 3.71914 20.2497 3.74992C20.2805 3.7807 20.3049 3.81724 20.3216 3.85745C20.3382 3.89767 20.3468 3.94077 20.3468 3.9843C20.3468 4.02782 20.3382 4.07093 20.3216 4.11114C20.3049 4.15135 20.2805 4.18789 20.2497 4.21867L10.6244 14.5434C10.5351 14.6394 10.4726 14.7573 10.4431 14.8851C10.4135 15.0129 10.418 15.1463 10.4561 15.2718L13.2054 21.7115C13.2082 21.7208 13.211 21.7293 13.2143 21.7382C13.3643 22.1727 13.744 22.4793 14.2029 22.4999H14.2497C14.4814 22.5012 14.7081 22.4328 14.9004 22.3036C15.0927 22.1743 15.2416 21.9902 15.3279 21.7752L22.4243 3.02898C22.5025 2.82615 22.5202 2.605 22.4754 2.39229C22.4305 2.17957 22.325 1.98441 22.1716 1.83039Z"
                                     fill="currentColor"></path>
                             </svg></div>
-                    </a><a aria-label="اکس ونکسی" href="https://x.com/vanaxi" target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">اکس ونکسی</span>
+                    </a><a aria-label={socials[3].label} href={socials[3].href} target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">{socials[3].label}</span>
                         <div class="icon-24 is-gray"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
                                 viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M17.5915 3H20.8104L13.7428 11.0473L22 21.9637H15.5202L10.4469 15.3299L4.63879 21.9637H1.41986L8.90736 13.3565L1 3H7.64079L12.2243 9.05998L17.5915 3ZM16.4648 20.0743H18.2493L6.7031 4.81939H4.78574L16.4648 20.0743Z"
                                     fill="currentColor"></path>
                             </svg></div>
-                    </a><a aria-label="آپارات ونکسی" href="https://www.aparat.com/vanaxi" target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">آپارات ونکسی</span>
+                    </a><a aria-label={socials[4].label} href={socials[4].href} target="_blank" rel="noopener noreferrer" class="footer_social-item w-inline-block"><span class="visually-hidden">{socials[4].label}</span>
                         <div class="icon-24 is-gray"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
                                 viewBox="0 0 24 24" fill="none">
                                 <g clip-path="url(#clip0_7636_620)">
@@ -136,55 +184,42 @@ const footerContacts: FooterContactItem[] = [
                     </a></div>
             </div>
             <div class="footer_box_links" role="navigation" aria-label="لینک‌های پاورقی">
-                <p class="text-bold">لینک ها</p>
+                <p class="text-bold">{linksTitle}</p>
                 <div class="footer_links-group">
-                    <div class="footer_links-col"><a href="#services" class="footer_link w-inline-block">
-                            <div>پلن ها</div>
-                        </a><a href="https://vanaxi.ir/Account/Login" class="footer_link w-inline-block" rel="noopener noreferrer">
-                            <div>پنل رانندگان</div>
-                        </a><a href="https://vanaxi.ir/Account/Login" class="footer_link w-inline-block" rel="noopener noreferrer">
-                            <div>پنل سازمان ها</div>
-                        </a><a href="#organizational-transport" class="footer_link w-inline-block">
-                            <div>مقالات</div>
-                        </a><a href="#why" class="footer_link w-inline-block">
-                            <div>درباره ونکسی</div>
-                        </a><a href="#process" class="footer_link w-inline-block">
-                            <div>تماس با ما</div>
-                        </a><a href="#process" class="footer_link footer_highlight w-inline-block">
-                            <div class="yellow_footer">جذب راننده</div>
-                        </a></div>
-                    <div class="footer_links-col"><a href="#services" class="footer_link w-inline-block">
-                            <div>خدمات</div>
-                        </a><a href="#services" class="footer_link w-inline-block">
-                            <div>سفر در اختیار</div>
-                        </a><a href="#services" class="footer_link w-inline-block">
-                            <div>سفر بین شهری</div>
-                        </a><a href="#services" class="footer_link w-inline-block">
-                            <div>ترانسفر فرودگاهی و مرز</div>
-                        </a><a href="#services" class="footer_link w-inline-block">
-                            <div>سرویس پرسنل و مدارس</div>
-                        </a><a href="#stories" class="footer_link w-inline-block">
-                            <div>تجربه مشتریان</div>
-                        </a><a href="#process" class="footer_link w-inline-block">
-                            <div>رانندگان ونکسی</div>
-                        </a></div>
+                    {linkColumns.map((column) => (
+                        <div class="footer_links-col">
+                            {column.map((link) => (
+                                <a href={link.href} class:list={['footer_link', 'w-inline-block', { footer_highlight: link.highlight }]} rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                                    <div class={link.highlight ? 'yellow_footer' : undefined}>{link.label}</div>
+                                </a>
+                            ))}
+                        </div>
+                    ))}
                 </div>
             </div>
             <div class="footer_box-signs">
-                <p class="text-bold">مجوزها و نماد ها</p>
+                <p class="text-bold">{signsTitle}</p>
                 <div class="footer_signs-grid">
-                    <div class="footer_sign"><OptimizedImg loading="lazy"
-                            src="/assets/images/6a6e0b67c6fa1a189ca7a72d_images-1.avif" alt="" /></div>
-                    <div class="footer_sign"><OptimizedImg loading="lazy"
-                            src="/assets/images/6a6e0d3f8fc171e8f29005ec_OIP-1-1.avif" alt="" /></div>
-                    <div class="footer_sign"><OptimizedImg loading="lazy" src="/assets/images/6a6e0d3fc104ee503dae21de_OIP-1.avif"
-                            alt="" /></div>
+                    {signs.map((src) => (
+                        <div class="footer_sign"><OptimizedImg loading="lazy" src={src} alt="" /></div>
+                    ))}
                 </div>
-                <div class="footer_copyright">کلیه حقوق مربوط به وبسایت ونکسی برای این شرکت محفوظ است.</div>
+                <div class="footer_copyright">{copyright}</div>
             </div>
         </div>
         <div class="footer_box-bottom">
-            <FooterContact items={footerContacts} />
+            {footerContacts.map((item) => (
+                <div class="footer_contact" style={item.compactOrder ? `--footer-contact-order: ${item.compactOrder}` : undefined}>
+                    <div><a href={item.href} class="text-small opacity-60">{item.label}</a></div>
+                    <a href={item.href} class="footer_contact-item" aria-label={item.ariaLabel}>
+                        <div class="icon-24 is-gray">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
+                                <path d={item.icon === 'mail' ? 'M17 3.5H7C4 3.5 2 5 2 8.5V15.5C2 19 4 20.5 7 20.5H17C20 20.5 22 19 22 15.5V8.5C22 5 20 3.5 17 3.5ZM17.47 9.59L14.34 12.09C13.68 12.62 12.84 12.88 12 12.88C11.16 12.88 10.31 12.62 9.66 12.09L6.53 9.59C6.21 9.33 6.16 8.85 6.41 8.53C6.67 8.21 7.14 8.15 7.46 8.41L10.59 10.91C11.35 11.52 12.64 11.52 13.4 10.91L16.53 8.41C16.85 8.15 17.33 8.2 17.58 8.53C17.84 8.85 17.79 9.33 17.47 9.59Z' : item.icon === 'phone' ? 'M18.3279 22.5001C17.4129 22.5001 16.1276 22.1691 14.2029 21.0938C11.8624 19.7813 10.0521 18.5696 7.72432 16.2479C5.47995 14.0049 4.38776 12.5527 2.85917 9.77115C1.13229 6.63052 1.42667 4.98427 1.75573 4.28068C2.1476 3.43974 2.72604 2.93677 3.4737 2.43755C3.89836 2.15932 4.34776 1.92081 4.8162 1.72505C4.86307 1.7049 4.90667 1.68568 4.94557 1.66833C5.1776 1.5638 5.52917 1.40583 5.97448 1.57458C6.27167 1.68615 6.53698 1.91443 6.95229 2.32458C7.80401 3.16458 8.96792 5.03537 9.39729 5.95412C9.68557 6.57333 9.87635 6.98208 9.87682 7.44052C9.87682 7.97724 9.60682 8.39115 9.27917 8.83787C9.21776 8.92177 9.15682 9.00193 9.09776 9.07974C8.74104 9.54849 8.66276 9.68396 8.71432 9.92583C8.81885 10.4119 9.59839 11.859 10.8795 13.1372C12.1606 14.4155 13.5659 15.1458 14.0539 15.2499C14.306 15.3038 14.4443 15.2222 14.9281 14.8529C14.9974 14.7999 15.0687 14.7451 15.1432 14.6902C15.6429 14.3185 16.0376 14.0555 16.5617 14.0555H16.5645C17.0206 14.0555 17.411 14.2533 18.0579 14.5796C18.9017 15.0052 20.8287 16.1541 21.6739 17.0068C22.0849 17.4211 22.3142 17.6855 22.4262 17.9822C22.5949 18.429 22.436 18.7791 22.3324 19.0135C22.3151 19.0524 22.2959 19.0951 22.2757 19.1424C22.0784 19.61 21.8385 20.0585 21.559 20.4821C21.0607 21.2274 20.5559 21.8044 19.7131 22.1968C19.2803 22.4015 18.8066 22.5052 18.3279 22.5001Z' : 'M20.6201 8.45C19.5701 3.83 15.5401 1.75 12.0001 1.75C12.0001 1.75 12.0001 1.75 11.9901 1.75C8.4601 1.75 4.4201 3.82 3.3701 8.44C2.2001 13.6 5.3601 17.97 8.2201 20.72C9.2801 21.74 10.6401 22.25 12.0001 22.25C13.3601 22.25 14.7201 21.74 15.7701 20.72C18.6301 17.97 21.7901 13.61 20.6201 8.45ZM12.0001 13.46C10.2601 13.46 8.8501 12.05 8.8501 10.31C8.8501 8.57 10.2601 7.16 12.0001 7.16C13.7401 7.16 15.1501 8.57 15.1501 10.31C15.1501 12.05 13.7401 13.46 12.0001 13.46Z'} fill="currentColor"></path>
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            ))}
         </div>
         </div>
     </div>
@@ -192,8 +227,8 @@ const footerContacts: FooterContactItem[] = [
             srcset="/assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img-p-500.png 500w, /assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img-p-800.png 800w, /assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img-p-1080.png 1080w, /assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img-p-1600.png 1600w, /assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img-p-2000.png 2000w, /assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img.png 2012w"
             alt="خودروی ونکسی در مسیر کوهستانی" src="/assets/images/6a6e0ea67dfa6f1e08cfdd43_footer-img.png"
             width="2012" height="673" loading="eager" fetchpriority="low" class="footer_img" />
-        <div class="footer_designer-wrapper"><a href="https://dizayn.ir" class="footer_designer w-inline-block">
-                <div class="designer_text">برندینگ و وبسایت:</div><img loading="eager"
+        <div class="footer_designer-wrapper"><a href={designer.href} class="footer_designer w-inline-block">
+                <div class="designer_text">{designer.label}</div><img loading="eager"
                     src="/assets/images/6a6e206da96bb6279090359d_dizayn-studio2.svg" alt="طراحی شده توسط استودیو طراحی"
                     width="149" height="37" class="designer_img" />
             </a></div>
