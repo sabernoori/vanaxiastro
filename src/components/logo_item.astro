@@ -1,0 +1,25 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  pairSrc?: string;
+  pairAlt?: string;
+  pairWidth?: number;
+  pairHeight?: number;
+}
+
+const { src, alt, width, height, pairSrc, pairAlt, pairWidth, pairHeight } = Astro.props;
+---
+
+<div
+  class="logos_item"
+  data-logo-reel={pairSrc ? '' : undefined}
+  data-logo-pair={pairSrc}
+  data-logo-pair-alt={pairAlt}
+  data-logo-pair-width={pairWidth}
+  data-logo-pair-height={pairHeight}
+>
+  <img class="image" src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+</div>

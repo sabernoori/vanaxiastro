@@ -24,7 +24,7 @@ const Tag = href ? 'a' : 'div';
 
 <Tag class="blog_card" href={href || undefined}>
   <div class="blog_image-frame">
-    <img class="blog_image" src={image || undefined} alt={imageAlt} />
+    <img class="blog_image" src={image || undefined} alt={imageAlt} width="720" height="450" loading="lazy" decoding="async" />
   </div>
   <div class="blog_card-content">
     <div class="blog_card-eyebrow">
