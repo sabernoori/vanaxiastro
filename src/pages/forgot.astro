@@ -1,0 +1,23 @@
+---
+import AuthShell from '../components/auth_shell.astro';
+---
+
+<AuthShell
+  title="بازیابی رمز عبور"
+  description="بازیابی رمز عبور ونکسی با شماره موبایل."
+  footerHref="/login"
+  footerLabel="ورود یا عضویت"
+>
+  <form class="login_card" data-auth data-next="/forgot/reset" method="post" action="#">
+    <p class="login_heading">بازیابی رمز عبور</p>
+    <div class="login_fields">
+      <p class="login_lead">شماره موبایلی که با آن ثبت نام کرده بودید را وارد کنید. در صورتی که از کاربران ما باشید کد تایید برای شما ارسال میشود</p>
+      <div class="login_field">
+        <label class="login_label" for="forgot-mobile">موبایل</label>
+        <input class="login_input" id="forgot-mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" data-rule="mobile" required />
+      </div>
+      <button class="login_submit" type="submit">ارسال کد تایید</button>
+      <p class="login_error" hidden role="alert"></p>
+    </div>
+  </form>
+</AuthShell>

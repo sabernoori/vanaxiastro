@@ -1,0 +1,136 @@
+---
+import AuthShell from '../components/auth_shell.astro';
+---
+
+<AuthShell
+  title="عضویت در ونکسی"
+  description="ثبت‌نام در ونکسی با نام، شماره موبایل و کلمه عبور."
+  footerHref="/login"
+  footerLabel="عضو هستید؟ وارد شوید"
+>
+  <form class="login_card" data-auth method="post" action="#">
+    <p class="login_heading">عضویت در ونکسی</p>
+    <div class="login_fields">
+      <div class="reg_pair">
+        <div class="login_field">
+          <label class="login_label" for="reg-name">نام و نام خانوادگی</label>
+          <input class="login_input" id="reg-name" name="name" type="text" autocomplete="name" data-rule="name" required />
+        </div>
+        <div class="login_field">
+          <label class="login_label" for="reg-mobile">موبایل</label>
+          <input class="login_input" id="reg-mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" data-rule="mobile" required />
+        </div>
+      </div>
+      <div class="reg_gender">
+        <span class="login_label" id="reg-gender-label">جنسیت:</span>
+        <div class="reg_seg" role="radiogroup" aria-labelledby="reg-gender-label">
+          <label class="reg_choice reg_choice-male">
+            <input type="radio" name="gender" value="male" checked />
+            <span>مرد</span>
+          </label>
+          <label class="reg_choice reg_choice-female">
+            <input type="radio" name="gender" value="female" />
+            <span>زن</span>
+          </label>
+        </div>
+      </div>
+      <div class="login_field">
+        <label class="login_label" for="reg-password">کلمه عبور</label>
+        <input class="login_input" id="reg-password" name="password" type="password" autocomplete="new-password" data-rule="password" required />
+      </div>
+      <div class="login_field">
+        <label class="login_label" for="reg-password-repeat">تکرار کلمه عبور</label>
+        <input class="login_input" id="reg-password-repeat" name="passwordRepeat" type="password" autocomplete="new-password" data-match="password" required />
+      </div>
+      <button class="login_submit" type="submit">عضویت</button>
+      <p class="login_error" hidden role="alert"></p>
+    </div>
+  </form>
+</AuthShell>
+
+<style>
+  .reg_pair {
+    display: flex;
+    gap: 16px;
+  }
+
+  .reg_pair .login_field {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .reg_gender {
+    display: flex;
+    direction: rtl;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin: 0;
+    padding: 8px 0 0;
+  }
+
+  .reg_gender .login_label {
+    padding: 0;
+    flex: none;
+  }
+
+  .reg_seg {
+    display: flex;
+    direction: rtl;
+    height: 48px;
+    width: 100%;
+  }
+
+  .reg_choice {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #c9d7e6;
+    background: #fff;
+    color: #000;
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    cursor: pointer;
+  }
+
+  .reg_choice-male {
+    border-radius: 0 8px 8px 0;
+  }
+
+  .reg_choice-female {
+    border-radius: 8px 0 0 8px;
+    margin-left: -1px;
+  }
+
+  .reg_choice input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .reg_choice:has(input:checked) {
+    z-index: 1;
+    background: #ebf3fe;
+    border-color: #0a3c91;
+    color: #0a3c91;
+    box-shadow: inset 0 0 0 1px #0a3c91;
+  }
+
+  .reg_choice:has(input:focus-visible) {
+    outline: 2px solid #0a3c91;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 767px) {
+    .reg_pair {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>

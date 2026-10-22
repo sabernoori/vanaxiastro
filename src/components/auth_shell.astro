@@ -1,0 +1,390 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  footerHref: string;
+  footerLabel: string;
+}
+
+const { title, description, footerHref, footerLabel } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+  <main class="login" dir="rtl">
+    <h1 class="visually-hidden">{title}</h1>
+    <picture class="login_bg">
+      <source media="(max-width: 767px)" srcset="/assets/images/bg-mob.png" />
+      <img src="/assets/images/bg-desk.png" alt="" width="1440" height="892" decoding="async" fetchpriority="high" />
+    </picture>
+
+    <div class="login_marks" aria-hidden="true">
+      <span class="login_vline"></span>
+      <span class="login_vline"></span>
+      <span class="login_hline login_hline-top"></span>
+      <span class="login_hline login_hline-bottom"></span>
+      <span class="login_handle login_handle-top-start"></span>
+      <span class="login_handle login_handle-top-end"></span>
+      <span class="login_handle login_handle-bottom-start"></span>
+      <span class="login_handle login_handle-bottom-end"></span>
+    </div>
+
+    <div class="login_col">
+      <a class="login_logo" href="/" aria-label="ونکسی، بازگشت به صفحه اصلی">
+        <img src="/assets/images/6a6e015d730ba56542dcdc2d_vanaxi-footer-logo.svg" alt="" width="213" height="64" />
+      </a>
+
+      <div class="login_sheet">
+        <slot />
+      </div>
+
+      <a class="login_join" href={footerHref}>{footerLabel}</a>
+    </div>
+  </main>
+  <script>
+    const sheet = document.querySelector('.login_sheet');
+    const marks = document.querySelector('.login_marks');
+    const placeLines = () => {
+      const box = sheet.getBoundingClientRect();
+      marks.style.setProperty('--line-top', `${Math.round(box.top - 14)}px`);
+      marks.style.setProperty('--line-bottom', `${Math.round(box.bottom + 13)}px`);
+    };
+    placeLines();
+    new ResizeObserver(placeLines).observe(sheet);
+    addEventListener('resize', placeLines);
+  </script>
+  <script>
+    const mobilePattern = /^09\d{9}$/;
+    const showError = (form, message) => {
+      const box = form.querySelector('.login_error');
+      if (!box) return;
+      box.hidden = !message;
+      box.textContent = message || '';
+    };
+    const checkField = (input) => {
+      const value = input.value.trim();
+      const rule = input.dataset.rule;
+      if (rule === 'mobile') {
+        if (!value) return 'شماره موبایل را وارد کنید.';
+        if (!mobilePattern.test(value)) return 'شماره موبایل معتبر نیست.';
+      }
+      if (rule === 'name') {
+        if (value.length < 3) return 'نام و نام خانوادگی را وارد کنید.';
+      }
+      if (rule === 'password') {
+        if (!value) return 'کلمه عبور را وارد کنید.';
+        if (value.length < 8) return 'کلمه عبور باید حداقل ۸ نویسه باشد.';
+      }
+      if (rule === 'code') {
+        if (!/^\d{4,6}$/.test(value)) return 'کد تایید را درست وارد کنید.';
+      }
+      if (input.dataset.match) {
+        const other = input.form.querySelector(`[name="${input.dataset.match}"]`);
+        if (!value) return 'تکرار کلمه عبور را وارد کنید.';
+        if (other && value !== other.value) return 'تکرار کلمه عبور با کلمه عبور یکسان نیست.';
+      }
+      if (input.required && !value) return 'این مورد را تکمیل کنید.';
+      return '';
+    };
+    document.querySelectorAll('form[data-auth]').forEach((form) => {
+      form.noValidate = true;
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const fields = [...form.querySelectorAll('[data-rule], [data-match]')];
+        let message = '';
+        fields.forEach((field) => {
+          const problem = checkField(field);
+          field.classList.toggle('is-invalid', Boolean(problem));
+          field.setAttribute('aria-invalid', problem ? 'true' : 'false');
+          if (!message && problem) message = problem;
+        });
+        showError(form, message);
+        if (message) return;
+        const next = form.dataset.next;
+        if (!next) return;
+        const mobile = form.querySelector('[name="mobile"]');
+        if (mobile instanceof HTMLInputElement) sessionStorage.setItem('vanaxi-reset-mobile', mobile.value.trim());
+        location.assign(next);
+      });
+    });
+  </script>
+</Layout>
+
+<style is:global>
+  .login {
+    --login-ink: #000b22;
+    --login-muted: #8c999f;
+    --login-line: #c9d7e6;
+    --login-link: #0a3c91;
+    --login-button: #002e7c;
+    --login-rail: min(436px, calc(100% - 1.5rem));
+    --login-gap: 12.5px;
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #e6eaf3;
+    color: var(--login-ink);
+  }
+
+  .login_bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .login_bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .login_marks {
+    --line-top: 0px;
+    --line-bottom: 0px;
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    mix-blend-mode: overlay;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .login_vline,
+  .login_hline,
+  .login_handle {
+    background: var(--login-ink);
+  }
+
+  .login_vline {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+  }
+
+  .login_vline:first-child { left: calc(50% - (var(--login-rail) / 2)); }
+  .login_vline:nth-child(2) { right: calc(50% - (var(--login-rail) / 2)); }
+
+  .login_col {
+    position: relative;
+    z-index: 2;
+    width: var(--login-rail);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login_logo {
+    display: block;
+    width: clamp(149px, 18vw, 213px);
+    aspect-ratio: 213 / 64;
+    margin-bottom: 44px;
+  }
+
+  .login_logo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .login_sheet {
+    position: relative;
+    width: calc(100% - (var(--login-gap) * 2));
+  }
+
+  .login_hline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+  }
+
+  .login_hline-top { top: var(--line-top); }
+  .login_hline-bottom { top: var(--line-bottom); }
+
+  .login_handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+  }
+
+  .login_handle-top-start,
+  .login_handle-top-end { top: calc(var(--line-top) - 6px); }
+  .login_handle-bottom-start,
+  .login_handle-bottom-end { top: calc(var(--line-bottom) - 6px); }
+  .login_handle-top-start,
+  .login_handle-bottom-start { left: calc(50% - (var(--login-rail) / 2) - 6px); }
+  .login_handle-top-end,
+  .login_handle-bottom-end { right: calc(50% - (var(--login-rail) / 2) - 6px); }
+
+  .login_card {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 533px;
+    padding: 16px 32px;
+    background: #fff;
+  }
+
+  .login_heading {
+    margin: 0;
+    width: 100%;
+    color: var(--login-ink);
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .login_lead {
+    margin: 0;
+    width: 100%;
+    color: var(--login-ink);
+    opacity: 0.6;
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    text-align: right;
+  }
+
+  .login_error {
+    margin: 0;
+    padding: 3px 12px;
+    border-radius: 4px;
+    background: rgba(240, 74, 63, 0.2);
+    color: #f04a3f;
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .login_card[hidden],
+  .login_error[hidden] {
+    display: none;
+  }
+
+  .login_input.is-invalid {
+    border-color: #f04a3f;
+  }
+
+  .login_fields {
+    width: 100%;
+    max-width: 347px;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .login_field {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .login_label,
+  .login_remember,
+  .login_forgot {
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+
+  .login_label,
+  .login_remember { color: var(--login-muted); }
+
+  .login_input {
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    border: 1px solid var(--login-line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--login-ink);
+    font-family: inherit;
+    font-size: 16px;
+    text-align: right;
+  }
+
+  .login_input:focus-visible,
+  .login_check:focus-visible,
+  .login_submit:focus-visible,
+  .login_forgot:focus-visible,
+  .login_join:focus-visible,
+  .login_logo:focus-visible {
+    outline: 2px solid var(--login-link);
+    outline-offset: 2px;
+  }
+
+  .login_row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .login_remember {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .login_check {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: var(--login-link);
+    border-radius: 4px;
+  }
+
+  .login_forgot,
+  .login_join {
+    color: var(--login-link);
+    text-decoration: none;
+  }
+
+  .login_submit {
+    height: 56px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--login-button);
+    color: #fff;
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    cursor: pointer;
+  }
+
+  .login_join {
+    margin-top: 44px;
+    font-family: Ravi, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  @media (max-width: 767px) {
+    .login_card {
+      min-height: 0;
+      padding-inline: 20px;
+    }
+  }
+</style>

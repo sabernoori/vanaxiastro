@@ -1,0 +1,35 @@
+---
+import AuthShell from '../../components/auth_shell.astro';
+---
+
+<AuthShell
+  title="رمز جدید"
+  description="وارد کردن کد تایید و ساخت رمز جدید ونکسی."
+  footerHref="/login"
+  footerLabel="لغو"
+>
+  <form class="login_card" data-auth method="post" action="#">
+    <p class="login_heading">بازیابی رمز عبور</p>
+    <div class="login_fields">
+      <p class="login_lead">لطفا کد تایید را وارد کرده و سپس رمز جدید را بسازید.</p>
+      <div class="login_field">
+        <label class="login_label" for="forgot-code">کد تایید</label>
+        <input class="login_input" id="forgot-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" data-rule="code" required />
+      </div>
+      <div class="login_field">
+        <label class="login_label" for="forgot-password">رمز جدید</label>
+        <input class="login_input" id="forgot-password" name="password" type="password" autocomplete="new-password" data-rule="password" required />
+      </div>
+      <div class="login_field">
+        <label class="login_label" for="forgot-password-repeat">تکرار رمز جدید</label>
+        <input class="login_input" id="forgot-password-repeat" name="passwordRepeat" type="password" autocomplete="new-password" data-match="password" required />
+      </div>
+      <label class="login_remember">
+        <input class="login_check" type="checkbox" name="remember" />
+        <span>مرا بخاطر بسپار</span>
+      </label>
+      <button class="login_submit" type="submit">ثبت و تایید رمز جدید</button>
+      <p class="login_error" hidden role="alert"></p>
+    </div>
+  </form>
+</AuthShell>

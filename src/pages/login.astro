@@ -1,0 +1,33 @@
+---
+import AuthShell from '../components/auth_shell.astro';
+---
+
+<AuthShell
+  title="ورود به ونکسی"
+  description="ورود به حساب ونکسی با شماره موبایل و کلمه عبور."
+  footerHref="/register"
+  footerLabel="عضو نیستید؟ عضو شوید"
+>
+  <form class="login_card" data-auth method="post" action="#">
+    <p class="login_heading">ورود به سایت</p>
+    <div class="login_fields">
+      <div class="login_field">
+        <label class="login_label" for="login-mobile">موبایل</label>
+        <input class="login_input" id="login-mobile" name="mobile" type="tel" inputmode="numeric" autocomplete="username" data-rule="mobile" required />
+      </div>
+      <div class="login_field">
+        <label class="login_label" for="login-password">کلمه عبور</label>
+        <input class="login_input" id="login-password" name="password" type="password" autocomplete="current-password" data-rule="password" required />
+      </div>
+      <div class="login_row">
+        <label class="login_remember">
+          <input class="login_check" type="checkbox" name="remember" />
+          <span>مرا بخاطر بسپار</span>
+        </label>
+        <a class="login_forgot" href="/forgot">رمز خود را فراموش کرده اید؟</a>
+      </div>
+      <button class="login_submit" type="submit">ورود</button>
+      <p class="login_error" hidden role="alert"></p>
+    </div>
+  </form>
+</AuthShell>
